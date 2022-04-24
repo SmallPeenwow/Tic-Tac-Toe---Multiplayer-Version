@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h3>Tic Tac Toe</h3>
+        <h3 className="bg-blue-500">Tic Tac Toe</h3>
       </header>
       <button>Start New</button>
       <button>Join Game</button>
