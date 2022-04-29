@@ -12,7 +12,7 @@ module.exports = {
         'join-button': '#b3cde0',
       }, 
       backgroundImage: {
-        'main-background': "linear-gradient(to bottom, #011f4b 75%, #00518a);",
+        'main-background': "linear-gradient(to bottom, #011f4b 80%, #00518a);",
       }
     },
   },

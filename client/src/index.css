@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.button-style {
+    @apply flex justify-center  rounded shadow-black font-medium shadow py-2 px-4 hover:opacity-75;
+}
+
+.button-color-one {
+    @apply bg-start-button;
+}
+
+.button-color-two {
+    @apply text-sky-600 bg-join-button;
+}
