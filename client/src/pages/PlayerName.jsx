@@ -1,11 +1,12 @@
 import React from 'react'
 
-const PlayerName = ({isDisplay, toggle}) => {
+const PlayerName = ({isDisplay, setIsDisplay}) => {
   return (
-      <div className={!isDisplay ? "hidden" : "flex flex-col gap-14 visible"}>     
-        <input type="text" className="w-96 pb-4 border-b-2 bg-transparent border-b-white outline-none text-center text-3xl"/>
-        <div className="flex justify-around">
-            <button onClick={toggle} className="button-style button-color-two w-24">Back</button>        
+      <div className={isDisplay == 1 || isDisplay == 2 ? "flex flex-col gap-10 visible" : "hidden"}>     
+        <input type="text" className="input-field"/>
+        <input type="text" className={isDisplay == 2 ? "input-field" : "hidden"}/>
+        <div className="flex justify-around mt-4">
+            <button onClick={() => setIsDisplay(0)} className="button-style button-color-two w-24">Back</button>        
             <button className="button-style button-color-one w-24">Let's Go</button>        
         </div>
     </div>

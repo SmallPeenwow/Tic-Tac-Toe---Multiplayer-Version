@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .button-style {
-    @apply flex justify-center  rounded shadow-black font-medium shadow py-2 px-4 hover:opacity-75;
+    @apply flex justify-center  rounded shadow-black font-medium shadow py-2 px-4 hover:scale-110;
 }
 
 .button-color-one {
@@ -12,4 +12,8 @@
 
 .button-color-two {
     @apply text-sky-600 bg-join-button;
+}
+
+.input-field {
+    @apply w-96 pb-4 border-b-2 bg-transparent border-b-white outline-none text-center text-2xl;
 }
