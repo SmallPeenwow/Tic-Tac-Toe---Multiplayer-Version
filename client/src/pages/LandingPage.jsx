@@ -5,16 +5,24 @@ import PlayerName from './PlayerName';
 const LandingPage = () => {
     const [isDisplay, setIsDisplay] = useState(0);  
     
-    const [isPlayerName, setIsPlayerName] = useState('');
+    const [isPlayerName, setIsPlayerName] = useState("");
 
     const setName = (event) => {
       setIsPlayerName(event.target.value);
     };
 
+    const resetInputField  = () => {
+      setIsPlayerName("");
+    };
+
+    const landingPageDisplay = () => {
+      setIsDisplay(0);
+    }
+
   return (
     <>
-        <PlayerName isDisplay={isDisplay} setIsDisplay={setIsDisplay} setName={setName} />
-        <GameArea isDisplay={isDisplay} setIsDisplay={setIsDisplay} isPlayerName={isPlayerName} /> 
+        <PlayerName isDisplay={isDisplay} setIsDisplay={setIsDisplay} setName={setName} resetInputField ={resetInputField} landingPageDisplay={landingPageDisplay} isPlayerName={isPlayerName}/>
+        <GameArea isDisplay={isDisplay} isPlayerName={isPlayerName} resetInputField ={resetInputField} landingPageDisplay={landingPageDisplay} /> 
         <div className={isDisplay != 0 ? 'hidden' : 'visible'}>
             <header className="text-4xl font-medium mb-6">
             <h3>Tic Tac Toe</h3>  

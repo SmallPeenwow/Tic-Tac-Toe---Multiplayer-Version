@@ -1,6 +1,6 @@
 import React from 'react'
 
-const GameArea = ({isDisplay, setIsDisplay, isPlayerName}) => {
+const GameArea = ({isDisplay, isPlayerName, resetInputField, landingPageDisplay}) => {
   return (
     <div className={isDisplay == 3 ? "flex flex-col justify-center h-full" : "hidden"}>
         <h1 className="text-5xl">{isPlayerName}</h1>
@@ -17,7 +17,12 @@ const GameArea = ({isDisplay, setIsDisplay, isPlayerName}) => {
                 <p>0</p>
             </div>
         </div>
-        {/* <button className="button-style button-color-one w-20">Quit</button> */}
+        <button onClick={() =>{
+            resetInputField();
+            landingPageDisplay();
+            }} 
+            className="button-style absolute bottom-16 left-10 button-color-one w-28">Rage Quit
+        </button>
     </div>
   )
 }
