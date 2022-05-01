@@ -1,12 +1,20 @@
 import React, { useState } from 'react'
+import GameArea from './GameArea';
 import PlayerName from './PlayerName';
 
 const LandingPage = () => {
-    const [isDisplay, setIsDisplay] = useState(0);    
+    const [isDisplay, setIsDisplay] = useState(0);  
+    
+    const [isPlayerName, setIsPlayerName] = useState('');
+
+    const setName = (event) => {
+      setIsPlayerName(event.target.value);
+    };
 
   return (
     <>
-        <PlayerName isDisplay={isDisplay} setIsDisplay={setIsDisplay}/>
+        <PlayerName isDisplay={isDisplay} setIsDisplay={setIsDisplay} setName={setName} />
+        <GameArea isDisplay={isDisplay} setIsDisplay={setIsDisplay} isPlayerName={isPlayerName} /> 
         <div className={isDisplay != 0 ? 'hidden' : 'visible'}>
             <header className="text-4xl font-medium mb-6">
             <h3>Tic Tac Toe</h3>  

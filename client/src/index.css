@@ -15,5 +15,5 @@
 }
 
 .input-field {
-    @apply w-96 pb-4 border-b-2 bg-transparent border-b-white outline-none text-center text-2xl;
+    @apply w-96 pb-4 border-b-2 bg-transparent border-b-white outline-none text-center text-3xl;
 }
