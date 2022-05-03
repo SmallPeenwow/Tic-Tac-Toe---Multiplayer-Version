@@ -7,12 +7,19 @@ const LandingPage = () => {
     
     const [isPlayerName, setIsPlayerName] = useState("");
 
+    const [isRoomCode, setIsRoomCode] = useState("");
+
     const setName = (event) => {
       setIsPlayerName(event.target.value);
     };
 
+    const setRoomId = (event) => {
+      setIsRoomCode(event.target.value);
+    }
+
     const resetInputField  = () => {
       setIsPlayerName("");
+      setIsRoomCode("");
     };
 
     const landingPageDisplay = () => {
@@ -21,7 +28,7 @@ const LandingPage = () => {
 
   return (
     <>
-        <PlayerName isDisplay={isDisplay} setIsDisplay={setIsDisplay} setName={setName} resetInputField ={resetInputField} landingPageDisplay={landingPageDisplay} isPlayerName={isPlayerName}/>
+        <PlayerName isDisplay={isDisplay} setIsDisplay={setIsDisplay} setName={setName} resetInputField ={resetInputField} landingPageDisplay={landingPageDisplay} isPlayerName={isPlayerName} setRoomId={setRoomId} isRoomCode={isRoomCode}/>
         <GameArea isDisplay={isDisplay} isPlayerName={isPlayerName} resetInputField ={resetInputField} landingPageDisplay={landingPageDisplay} /> 
         <div className={isDisplay != 0 ? 'hidden' : 'visible'}>
             <header className="text-4xl font-medium mb-6">
