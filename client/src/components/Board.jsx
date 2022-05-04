@@ -1,53 +1,37 @@
-import React, { useState } from 'react'
+import React, { Component } from 'react'
 
+class Board extends Component {
 
-const Board = () => {
-  
-  const [state, setState] = useState({ 
-    turn: 'X', 
-    gameEnded: false, 
-    board: Array(9).fill(''),
-    totalMoves: 0,
-    winner: undefined,
-  });
-
-  const clicked = (event) => {
-
-    let num = event.target.dataset.square;
-    console.log(num);
-    //console.log(state.board[num])
-    //console.log(state.board);
-
-    if(state.board[event.target.dataset.square] == ''){
-
-      state.board[event.target.dataset.square] = state.turn;
-      
-      event.target.innerText = state.turn;
-      setState({
-        turn: state.turn == 'X' ? 'O' : 'X',
-        board: state.board,
-        totalMoves: state.totalMoves++,
-      })
-      
+  constructor() {
+    super();
+    this.state = {
+      turn: 'X', 
+      gameEnded: false, 
+      board: Array(9).fill(''),
+      totalMoves: 0,
+      winner: undefined,
     }
-    
-    let result = checkWinner();
+  }
 
-    if(result == 'X'){
-      setState({
-        gameEnded: true,
-        winner: 'X',
+  clicked(event) {
+
+    if(this.state.board[event.target.dataset.square] == '') {
+      
+      this.state.board[event.target.dataset.square] = this.state.turn;
+
+      event.target.innerText = this.state.turn;
+
+      this.setState({
+        turn: this.state.turn == 'X' ? 'O' : 'X',
+        board: this.state.board,
+        totalMoves: this.state.totalMoves++,
       })
-    } else {
-      setState({
-        gameEnded: true,
-        winner: 'O',
-      })
+
     }
 
-  };
+  }
 
-  const checkWinner = () => {
+  checkWinner() {
     let lines = [
       [0, 3, 6],
       [1, 4, 7],
@@ -59,26 +43,32 @@ const Board = () => {
       [6, 7, 8],
     ];
 
+    let board = this.state.board;
+
     for(let i = 0; i < lines.length; i++){
-      if(state.board[lines[i][0]] == state.board[lines[i][1]] && state.board[lines[i][1]] == state.board[lines[i][2]]) {
-        return state.board[lines[i][0]];
+      if(board[lines[i][0]] == board[lines[i][1]] && board[lines[i][1]] == board[lines[i][2]]) {
+        return board[lines[i][0]];
       }
     }
   }
 
-  return (
-    <div className="flex w-72 flex-wrap mt-6 mb-6 cursor-pointer" onClick={(e) => clicked(e)}>
-      <div className="square border-r-2 border-b-2" data-square="0"></div>
-      <div className="square border-b-2 border-r-2" data-square="1"></div>
-      <div className="square border-b-2" data-square="2"></div>
-      <div className="square border-b-2 border-r-2" data-square="3"></div>
-      <div className="square border-b-2 border-r-2" data-square="4"></div>
-      <div className="square border-b-2" data-square="5"></div>
-      <div className="square border-r-2" data-square="6"></div>
-      <div className="square border-r-2" data-square="7"></div>
-      <div className="square" data-square="8"></div>
-    </div>
-  )
+  render() {
+    return (
+
+      <div className="flex w-72 flex-wrap mt-6 mb-6 cursor-pointer" onClick={(e) => this.clicked(e)}>
+        <div className="square border-r-2 border-b-2" data-square="0"></div>
+        <div className="square border-b-2 border-r-2" data-square="1"></div>
+        <div className="square border-b-2" data-square="2"></div>
+        <div className="square border-b-2 border-r-2" data-square="3"></div>
+        <div className="square border-b-2 border-r-2" data-square="4"></div>
+        <div className="square border-b-2" data-square="5"></div>
+        <div className="square border-r-2" data-square="6"></div>
+        <div className="square border-r-2" data-square="7"></div>
+        <div className="square" data-square="8"></div>
+      </div>
+
+    );
+  }
 }
 
 export default Board
