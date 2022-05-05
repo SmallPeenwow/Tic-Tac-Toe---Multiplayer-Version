@@ -5,7 +5,7 @@ const PlayerName = ({ isDisplay, setIsDisplay, setName, resetInputField, landing
   return (
       <div className={isDisplay == 1 || isDisplay == 2 ? "flex flex-col gap-10 visible" : "hidden"}>     
         <input type="text" className="input-field" placeholder="Enter Name" value={isPlayerName} onChange={setName} maxLength="15"/>
-        <input type="text" className={isDisplay == 2 ? "input-field" : "hidden"} value={isRoomCode} placeholder="Enter Code" onChange={setRoomId}/>
+        <input type="text" className={isDisplay == 2 ? "input-field" : "hidden"} value={isRoomCode} placeholder="Room ID" onChange={setRoomId}/>
         <div className="flex justify-around mt-4">
             <button onClick={() => {
               landingPageDisplay(); 

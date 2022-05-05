@@ -7,28 +7,46 @@ class Board extends Component {
     this.state = {
       turn: 'X', 
       gameEnded: false, 
+      winner: undefined,
+    };
+    this.gameState = {
       board: Array(9).fill(''),
       totalMoves: 0,
-      winner: undefined,
-    }
+    };
   }
 
   clicked(event) {
 
-    if(this.state.board[event.target.dataset.square] == '') {
+    if(this.gameState.board[event.target.dataset.square] == '') {
       
-      this.state.board[event.target.dataset.square] = this.state.turn;
+      this.gameState.board[event.target.dataset.square] = this.state.turn;
 
       event.target.innerText = this.state.turn;
 
       this.setState({
         turn: this.state.turn == 'X' ? 'O' : 'X',
-        board: this.state.board,
-        totalMoves: this.state.totalMoves++,
       })
-
     }
 
+    let result = checkWinner();
+
+    if(result == 'X'){
+      this.setState({
+        gameEnded: true,
+        winner: 'X',
+      })
+    } else if(result == 'O'){
+      this.setState({
+        gameEnded: true,
+        winner: 'O',
+      })
+    } else if(result == 'draw'){
+      this.setState({
+        gameEnded: true,
+        winner: 'draw',
+      })
+    }
+    console.log(this.gameState.gameEnded);
   }
 
   checkWinner() {
@@ -43,13 +61,18 @@ class Board extends Component {
       [6, 7, 8],
     ];
 
-    let board = this.state.board;
+    let board = this.gameState.board;
 
     for(let i = 0; i < lines.length; i++){
       if(board[lines[i][0]] == board[lines[i][1]] && board[lines[i][1]] == board[lines[i][2]]) {
         return board[lines[i][0]];
       }
     }
+    console.log(gameState.totalMoves, 'h')
+    if(this.gameState.totalMoves == 9){
+      return 'draw';
+    }
+
   }
 
   render() {
