@@ -4,12 +4,12 @@ class Board extends Component {
 
   constructor() {
     super();
-    this.state = {
-      turn: 'X', 
-      gameEnded: false, 
+    this.state = {  
       winner: undefined,
     };
     this.gameState = {
+      turn: 'X', 
+      gameEnded: false, 
       board: Array(9).fill(''),
       totalMoves: 0,
     };
@@ -17,30 +17,35 @@ class Board extends Component {
 
   clicked(event) {
 
+    if(this.gameState.gameEnded) return;
+
     if(this.gameState.board[event.target.dataset.square] == '') {
       
-      this.gameState.board[event.target.dataset.square] = this.state.turn;
+      this.gameState.board[event.target.dataset.square] = this.gameState.turn;
 
-      event.target.innerText = this.state.turn;
+      event.target.innerText = this.gameState.turn;
 
-      this.setState({
-        turn: this.state.turn == 'X' ? 'O' : 'X',
-      })
+      this.gameState.turn = this.gameState.turn == 'X' ? 'O' : 'X';
+
+      this.gameState.totalMoves++;
     }
 
     let result = checkWinner();
 
     if(result == 'X'){
+      this.gameState.gameEnded = true;
       this.setState({
         gameEnded: true,
         winner: 'X',
       })
     } else if(result == 'O'){
+      this.gameState.gameEnded = true;
       this.setState({
         gameEnded: true,
         winner: 'O',
       })
     } else if(result == 'draw'){
+      this.gameState.gameEnded = true;
       this.setState({
         gameEnded: true,
         winner: 'draw',
