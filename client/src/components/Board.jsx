@@ -17,7 +17,9 @@ class Board extends Component {
 
   clicked(event) {
 
-    if(this.gameState.gameEnded) return;
+    if(this.gameState.gameEnded){
+      return;
+    } 
 
     if(this.gameState.board[event.target.dataset.square] == '') {
       
@@ -30,7 +32,7 @@ class Board extends Component {
       this.gameState.totalMoves++;
     }
 
-    let result = checkWinner();
+    let result = this.checkWinner();
 
     if(result == 'X'){
       this.gameState.gameEnded = true;
@@ -73,7 +75,7 @@ class Board extends Component {
         return board[lines[i][0]];
       }
     }
-    console.log(gameState.totalMoves, 'h')
+    console.log(this.gameState.totalMoves, 'h')
     if(this.gameState.totalMoves == 9){
       return 'draw';
     }
