@@ -1,6 +1,6 @@
 import React from 'react'
 import Board from '../components/Board'
-import PlayAgainButton from '../hooks/PlayAgainButton'
+//import PlayAgainButton from '../hooks/PlayAgainButton'
 
 const GameArea = ({isDisplay, isPlayerName, resetInputField, landingPageDisplay}) => {
   return (
@@ -19,7 +19,7 @@ const GameArea = ({isDisplay, isPlayerName, resetInputField, landingPageDisplay}
                 <p>0</p>
             </div>
         </div>
-        <PlayAgainButton />
+        {/* <PlayAgainButton /> */}
         <button onClick={() =>{
             resetInputField();
             landingPageDisplay();
