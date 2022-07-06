@@ -1,5 +1,5 @@
 import React from 'react'
-
+//Need to remove this and use the StartNew and JoinGame files with Route
 const PlayerName = ({ isDisplay, setIsDisplay, setName, resetInputField, landingPageDisplay, isPlayerName, setRoomId, isRoomCode }) => {
   
   return (

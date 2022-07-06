@@ -53,7 +53,6 @@ class Board extends Component {
         winner: 'draw',
       })
     }
-    console.log(this.gameState.gameEnded);
   }
 
   checkWinner() {
