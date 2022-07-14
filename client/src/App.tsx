@@ -6,7 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import StartNew from "./pages/StartNew";
 import { io } from 'Socket.io-client';
 
-const socket = io("http://localhost:1338");
+// const socket = io("http://localhost:1338");
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Route path="/" element={<LandingPage/>} />
         <Route path="/startNew" element={<StartNew/>} />
         <Route path="/JoinGame" element={<JoinGame/>} />
-        {/* <Route path="/gameArea" element={<GameArea/>} /> */}
+        <Route path="/gameArea/:type" element={<GameArea/>} />
       </Routes>
     </>
   );
