@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import GameButtons from '../components/GameButtons';
 
 const JoinGame = () => {
@@ -20,7 +19,7 @@ const JoinGame = () => {
 				<input type='text' className='input-field' placeholder='Enter Name' maxLength={15} value={isPlayerName} onChange={setName} />
 				<input type='text' className='input-field' placeholder='Room ID' value={isRoomCode} onChange={setRoomId} />
 				<div className='flex justify-around mt-4'>
-					<GameButtons playerName={isPlayerName} />
+					<GameButtons playerName={isPlayerName} setIsPlayerName={setIsPlayerName} />
 				</div>
 			</div>
 		</div>

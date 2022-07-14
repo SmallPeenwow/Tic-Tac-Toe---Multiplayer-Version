@@ -2,11 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
-	// const resetInputField  = () => {
-	//   setIsPlayerName("");
-	//   setIsRoomCode("");
-	// };
-
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			<header className='text-4xl font-medium mb-6'>
