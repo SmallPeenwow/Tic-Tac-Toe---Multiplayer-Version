@@ -8,17 +8,12 @@ type PlayerNameProp = {
 
 //TODO make check that would stop user if they don't have name
 const GameButtons = ({ playerName, setIsPlayerName }: PlayerNameProp) => {
-	const resetInputField = () => {
-		setIsPlayerName('');
-		// setIsRoomCode("");
-	};
-
 	return (
 		<>
-			<Link to='/' className='button-style button-color-two w-24' onClick={resetInputField}>
+			<Link to='/' className='button-style button-color-two w-24'>
 				Back
 			</Link>
-			<Link to={`/gameArea/${playerName}`} className='button-style button-color-one w-24' onClick={resetInputField}>
+			<Link to={`/gameArea/${playerName}`} className='button-style button-color-one w-24'>
 				Let's Go
 			</Link>
 		</>

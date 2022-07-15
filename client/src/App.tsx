@@ -6,7 +6,14 @@ import LandingPage from './pages/LandingPage';
 import StartNew from './pages/StartNew';
 import { io } from 'Socket.io-client';
 
-// const socket = io("http://localhost:1338");
+const socket = io('http://localhost:1338');
+socket.on('connect', () => {
+	// socket.emit('connect-user', App());
+});
+
+socket.on('receive', (message) => {
+	console.log('message');
+});
 
 function App() {
 	return (
