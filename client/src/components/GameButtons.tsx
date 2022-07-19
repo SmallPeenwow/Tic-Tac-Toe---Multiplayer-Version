@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 
 type PlayerNameProp = {
 	playerName: string;
-	setIsPlayerName: (active: string) => void;
 };
 
 //TODO make check that would stop user if they don't have name
-const GameButtons = ({ playerName, setIsPlayerName }: PlayerNameProp) => {
+const GameButtons = ({ playerName }: PlayerNameProp) => {
 	return (
 		<>
 			<Link to='/' className='button-style button-color-two w-24'>

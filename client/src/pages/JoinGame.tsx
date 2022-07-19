@@ -19,7 +19,7 @@ const JoinGame = () => {
 				<input type='text' className='input-field' placeholder='Enter Name' maxLength={15} value={isPlayerName} onChange={setName} />
 				<input type='text' className='input-field' placeholder='Room ID' value={isRoomCode} onChange={setRoomId} />
 				<div className='flex justify-around mt-4'>
-					<GameButtons playerName={isPlayerName} setIsPlayerName={setIsPlayerName} />
+					<GameButtons playerName={isPlayerName} />
 				</div>
 			</div>
 		</div>

@@ -13,7 +13,7 @@ const StartNew = () => {
 			<div className='flex flex-col gap-10 visible'>
 				<input type='text' className='input-field' placeholder='Enter Name' maxLength={15} value={isPlayerName} onChange={setName} />
 				<div className='flex justify-around mt-4'>
-					<GameButtons playerName={isPlayerName} setIsPlayerName={setIsPlayerName} />
+					<GameButtons playerName={isPlayerName} />
 				</div>
 			</div>
 		</div>
