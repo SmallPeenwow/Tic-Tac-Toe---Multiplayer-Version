@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import GameButtons from '../components/GameButtons';
+import JoinGameButtons from '../components/JoinGameButtons';
 
 const JoinGame = () => {
 	const [isPlayerName, setIsPlayerName] = useState('');
@@ -19,7 +19,7 @@ const JoinGame = () => {
 				<input type='text' className='input-field' placeholder='Enter Name' maxLength={15} value={isPlayerName} onChange={setName} />
 				<input type='text' className='input-field' placeholder='Room ID' value={isRoomCode} onChange={setRoomId} />
 				<div className='flex justify-around mt-4'>
-					<GameButtons playerName={isPlayerName} />
+					<JoinGameButtons playerName={isPlayerName} roomCode={isRoomCode} />
 				</div>
 			</div>
 		</div>

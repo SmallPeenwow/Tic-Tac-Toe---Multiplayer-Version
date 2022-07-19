@@ -3,21 +3,25 @@
 @tailwind utilities;
 
 .button-style {
-    @apply flex justify-center  rounded shadow-black font-medium shadow py-2 px-4 hover:scale-110;
+	@apply flex justify-center  rounded shadow-black font-medium shadow py-2 px-4 hover:scale-110;
 }
 
 .button-color-one {
-    @apply bg-start-button;
+	@apply bg-start-button;
 }
 
 .button-color-two {
-    @apply text-sky-600 bg-join-button;
+	@apply text-sky-600 bg-join-button;
 }
 
 .input-field {
-    @apply w-96 pb-4 border-b-2 bg-transparent border-b-white outline-none text-center text-3xl;
+	@apply w-96 pb-4 border-b-2 bg-transparent border-b-white outline-none text-center text-3xl;
 }
 
 .square {
-    @apply w-24 h-24 border-white items-center flex justify-center text-7xl;
+	@apply w-24 h-24 border-white items-center flex justify-center text-7xl;
+}
+
+.disabled-link {
+	pointer-events: none;
 }

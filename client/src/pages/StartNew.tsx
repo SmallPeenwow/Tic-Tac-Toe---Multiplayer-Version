@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import GameButtons from '../components/GameButtons';
+import EnterGameButtons from '../components/EnterGameButtons';
 
 const StartNew = () => {
 	const [isPlayerName, setIsPlayerName] = useState('');
@@ -13,7 +13,7 @@ const StartNew = () => {
 			<div className='flex flex-col gap-10 visible'>
 				<input type='text' className='input-field' placeholder='Enter Name' maxLength={15} value={isPlayerName} onChange={setName} />
 				<div className='flex justify-around mt-4'>
-					<GameButtons playerName={isPlayerName} />
+					<EnterGameButtons playerName={isPlayerName} />
 				</div>
 			</div>
 		</div>
