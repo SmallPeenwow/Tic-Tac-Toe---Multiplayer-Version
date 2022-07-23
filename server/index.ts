@@ -17,9 +17,10 @@ io.on('connection', function (socket: any) {
 
 	// This displays message to user
 	socket.on('connect-user', (message: any, room: any) => {
-		if (room !== '') {
-			socket.to(room).emit('message', message);
-		}
+		// if (room !== '') {
+		// 	socket.to(room).emit('message', message);
+		// }
+		console.log(message);
 		//socket.broadcast.emit('receive', message);
 	});
 

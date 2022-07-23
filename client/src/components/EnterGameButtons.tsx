@@ -1,7 +1,6 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import BackButton from './BackButton';
-import SocketContext from '../context/socket';
+import { socket } from '../App';
 
 // Socket io function must go here
 
@@ -13,7 +12,7 @@ type PlayerNameProp = {
 
 //TODO make check that would stop user if they don't have name
 const EnterGameButtons = ({ playerName }: PlayerNameProp) => {
-	const socket = useContext(SocketContext);
+	socket.emit('connect-user', 'neep');
 
 	return (
 		<>
