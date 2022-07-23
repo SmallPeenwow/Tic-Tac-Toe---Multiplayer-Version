@@ -3,6 +3,8 @@ import Board from '../components/Board';
 import { useParams, Link } from 'react-router-dom';
 //import PlayAgainButton from '../hooks/PlayAgainButton'
 
+// Add onclick for socket.io functions to make the rooms disconnect
+
 const GameArea = () => {
 	const { type } = useParams();
 

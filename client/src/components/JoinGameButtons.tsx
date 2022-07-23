@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import BackButton from './BackButton';
 
+// Socket io function goes here
+
 type JoinGameProps = {
 	playerName: string;
 	roomCode: string;
