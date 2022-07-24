@@ -34,9 +34,28 @@ io.on('connection', function (socket: any) {
 		socket.join(room);
 		console.log(room);
 	});
+	//callBack: function
+	socket.on('check-room', (room: string, callback: any) => {
+		if (socket.rooms.size > 2) {
+			callback(false);
+		}
+	});
 
 	socket.on('join-room', (roomId: string) => {
-		socket.join(roomId);
+		if (socket.rooms.size <= 2) {
+			socket.join(roomId);
+			console.log(roomId);
+			console.log('yes');
+			console.log(socket.rooms.size); // use this to make a check function
+		} else {
+			console.log(roomId);
+			console.log('no');
+			console.log(socket.rooms.size); // use this to make a check function
+		}
+	});
+
+	socket.on('leave-room', (roomId: string) => {
+		socket.leave(roomId);
 		console.log(roomId);
 	});
 

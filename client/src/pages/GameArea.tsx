@@ -1,6 +1,6 @@
 import Board from '../components/Board';
 import { useParams, Link } from 'react-router-dom';
-//import { socket } from '../App';
+import { socket } from '../App';
 
 // Add onclick for socket.io functions to make the rooms disconnect
 
@@ -27,7 +27,7 @@ const GameArea = () => {
 						<p>0</p>
 					</div>
 				</div>
-				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28'>
+				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28' onClick={() => socket.emit('leave-room', type)}>
 					Rage Quit
 				</Link>
 			</div>

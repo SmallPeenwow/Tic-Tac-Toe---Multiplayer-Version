@@ -13,7 +13,8 @@ const EnterGameButtons = ({ playerName }: PlayerNameProp) => {
 
 	const createRoom = (room: string) => {
 		if (playerName.length !== 0) {
-			socket.emit('create-room', room);
+			// socket.emit('create-room', room);
+			socket.emit('create-room', 'yes');
 		}
 	};
 

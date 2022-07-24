@@ -1,4 +1,5 @@
-//import { socket } from '../App';
+import { useState } from 'react';
+import { socket } from '../App';
 
 // const sockets =  socket.of('/').adapter.sockets(new Set());
 
@@ -13,12 +14,24 @@ type ValidationProps = {
 
 export function validationCheck({ name, roomId }: ValidationProps) {
 	let valid: boolean;
+	const [roomSpace, setRoomSpace] = useState(true);
 
-	if (name.length !== 0 && roomId.length !== 0 && roomId.length === 20) {
+	socket.emit('check-room', { room: roomId }, (response: any) => {
+		checkRoom(response);
+	});
+
+	const checkRoom = (response: any) => {
+		setRoomSpace(response);
+	};
+
+	console.log(roomSpace);
+
+	if (name.length !== 0 && roomId.length !== 0 && roomId.length === 3 && roomSpace) {
 		valid = true;
 	} else {
 		valid = false;
+		//message = 'Not able to join game because already two players';
 	}
 
-	return { valid };
+	return { valid, roomSpace };
 }

@@ -1,32 +1,45 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-//import { socket } from '../App';
+import { socket } from '../App';
 import { validationCheck } from '../hooks/joinRoomCheck';
 
 import BackButton from './BackButton';
 
 type JoinGameProps = {
-	playerName: string;
 	roomCode: string;
+	playerName: string;
 };
 
-const JoinGameButtons = ({ playerName, roomCode }: JoinGameProps) => {
+const JoinGameButtons = ({ roomCode, playerName }: JoinGameProps) => {
 	const [isValid, setIsValid] = useState(false);
 
-	// Socket io function goes here
-	const joinRoom = (playerName: string, roomCode: string) => {
-		const { valid } = validationCheck({ name: playerName, roomId: roomCode });
+	const joinRoom = (name: string, roomId: string) => {
+		// Checks to see if all finds are met before
+		const { valid, roomSpace } = validationCheck({ name: name, roomId: roomId });
 
 		if (valid) {
-			//socket.emit('join-room', room);
-			setIsValid(isValid);
+			if (roomSpace) {
+				//socket.emit('join-room', roomId);
+				setIsValid(true);
+				socket.emit('join-room', 'yes');
+			} else {
+				console.log('The room you trying to access already has two players'); // Will get snackbar later for this
+			}
 		}
 	};
 
+	// const checkInput = (playerName: string, roomCode: string) => {
+	// 	setIsValid(valid);
+	// };
+	//checkInput(isPlayerName, isRoomCode);
 	return (
 		<>
 			<BackButton />
-			<Link to={isValid ? `/gameArea/joinGame` : '#'} className='button-style button-color-one w-24' onClick={() => joinRoom(playerName, roomCode)}>
+			<Link
+				to={isValid ? `/gameArea/joinGame-${roomCode}` : '#'}
+				className='button-style button-color-one w-24'
+				onClick={() => joinRoom(playerName, roomCode)}
+			>
 				Let's Go
 			</Link>
 		</>
