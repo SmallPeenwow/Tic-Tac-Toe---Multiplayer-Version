@@ -4,10 +4,19 @@ import { socket } from '../App';
 
 // const s = socket.sockets.adapter.rooms
 
-export function validationCheck(name: string, roodId: string) {
-	if (name.length !== 0 && roodId.length !== 0 && roodId.match(/^this must be code for socket connection$/)) {
-		return true;
+type ValidationProps = {
+	name: string;
+	roomId: string;
+};
+
+export function validationCheck({ name, roomId }: ValidationProps) {
+	let isValid: boolean;
+
+	if (name.length !== 0 && roomId.length !== 0 && roomId.match(/^this must be code for socket connection$/)) {
+		isValid = true;
 	} else {
-		return false;
+		isValid = false;
 	}
+
+	return { isValid };
 }

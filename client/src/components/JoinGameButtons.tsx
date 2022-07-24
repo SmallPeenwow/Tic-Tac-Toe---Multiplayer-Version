@@ -8,9 +8,10 @@ const [isValid, setIsValid] = useState(false);
 
 // Socket io function goes here
 const joinRoom = (playerName: string, roomCode: string) => {
-	//socket.emit('join-room', room);
-	setIsValid(validationCheck(playerName, roomCode));
+	const { isValid } = validationCheck({ name: playerName, roomId: roomCode });
 	if (isValid) {
+		//socket.emit('join-room', room);
+		setIsValid(isValid);
 	}
 };
 
