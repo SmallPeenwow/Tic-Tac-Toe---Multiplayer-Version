@@ -4,8 +4,11 @@ import { useParams, Link } from 'react-router-dom';
 
 // Add onclick for socket.io functions to make the rooms disconnect
 
+// Must make check to see who started and joined game
+
 const GameArea = () => {
 	const { type } = useParams();
+	console.log(type);
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
@@ -14,12 +17,12 @@ const GameArea = () => {
 				<Board />
 				<h2 className='border-b-2 border-b-white w-72 text-2xl'>Score Board</h2>
 				<div className='flex justify-center text-xl'>
-					<div className='flex flex-col p-2 px-4 w-28 overflow-hidden'>
-						<p>{type}</p>
+					<div className='flex capitalize flex-col p-2 px-4 w-28 overflow-hidden'>
+						<p>you</p>
 						<p>0</p>
 					</div>
 					<div className='border-l-2 border-l-white'></div>
-					<div className='flex flex-col p-2 px-4 w-28 overflow-hidden'>
+					<div className='flex capitalize flex-col p-2 px-4 w-28 overflow-hidden'>
 						<p>Player2</p>
 						<p>0</p>
 					</div>

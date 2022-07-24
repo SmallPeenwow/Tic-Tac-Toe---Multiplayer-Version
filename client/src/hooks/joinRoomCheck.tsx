@@ -9,15 +9,12 @@
 type ValidationProps = {
 	name: string;
 	roomId: string;
-	codeGenerate: string;
 };
 
-export function validationCheck({ name, roomId, codeGenerate }: ValidationProps) {
+export function validationCheck({ name, roomId }: ValidationProps) {
 	let valid: boolean;
 
-	let regex = new RegExp(`^${codeGenerate}$`);
-
-	if (name.length !== 0 && roomId.length !== 0 && regex.test(roomId)) {
+	if (name.length !== 0 && roomId.length !== 0 && roomId.length === 20) {
 		valid = true;
 	} else {
 		valid = false;

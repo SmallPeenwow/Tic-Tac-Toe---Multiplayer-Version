@@ -16,18 +16,28 @@ io.on('connection', function (socket: any) {
 	console.log(socket.id);
 
 	// This displays message to user
-	socket.on('connect-user', (message: any, room: any) => {
-		// if (room !== '') {
-		// 	socket.to(room).emit('message', message);
-		// }
-		console.log(message);
-		//socket.broadcast.emit('receive', message);
-	});
+	// socket.on('connect-user', (message: any, room: any) => {
+	// 	// if (room !== '') {
+	// 	// 	socket.to(room).emit('message', message);
+	// 	// }
+	// 	console.log(message);
+	// 	//socket.broadcast.emit('receive', message);
+	// });
 
 	// This will be for when the users join the same room
-	socket.on('join-room', (room: string, callback: any) => {
+	// socket.on('join-room', (room: string, callback: any) => {
+	// 	socket.join(room);
+	// 	callback(`Joined ${room}`); // sends message back of room joined // sends back code functions
+	// });
+
+	socket.on('create-room', (room: string) => {
 		socket.join(room);
-		callback(`Joined ${room}`); // sends message back of room joined // sends back code functions
+		console.log(room);
+	});
+
+	socket.on('join-room', (roomId: string) => {
+		socket.join(roomId);
+		console.log(roomId);
 	});
 
 	//Whenever someone disconnects this piece of code executed
