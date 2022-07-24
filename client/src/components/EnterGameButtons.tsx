@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import BackButton from './BackButton';
-import { socket } from '../App';
+//import { socket } from '../App';
 
 // Socket io function must go here
 
@@ -12,7 +12,7 @@ type PlayerNameProp = {
 
 //TODO make check that would stop user if they don't have name
 const EnterGameButtons = ({ playerName }: PlayerNameProp) => {
-	socket.emit('connect-user', 'neep');
+	//socket.emit('connect-user', 'neep');
 
 	return (
 		<>

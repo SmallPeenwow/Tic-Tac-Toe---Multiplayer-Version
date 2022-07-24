@@ -1,6 +1,6 @@
 import Board from '../components/Board';
 import { useParams, Link } from 'react-router-dom';
-import { socket } from '../App';
+//import { socket } from '../App';
 
 // Add onclick for socket.io functions to make the rooms disconnect
 

@@ -17,7 +17,7 @@ const JoinGame = () => {
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			<div className='flex flex-col gap-10'>
 				<input type='text' className='input-field' placeholder='Enter Name' maxLength={15} value={isPlayerName} onChange={setName} />
-				<input type='text' className='input-field' placeholder='Room ID' value={isRoomCode} onChange={setRoomId} />
+				<input type='text' className='input-field' placeholder='Room ID' value={isRoomCode} onChange={setRoomId} maxLength={20} />
 				<div className='flex justify-around mt-4'>
 					<JoinGameButtons playerName={isPlayerName} roomCode={isRoomCode} />
 				</div>
