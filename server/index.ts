@@ -34,9 +34,10 @@ io.on('connection', function (socket: any) {
 		socket.join(room);
 		console.log(room);
 	});
-	//callBack: function
+
+	//callBack: function // should check the room number that has been sent to it
 	socket.on('check-room', (room: string, callback: any) => {
-		if (socket.rooms.size > 2) {
+		if (!(socket.rooms.size <= 2)) {
 			callback(false);
 		}
 	});

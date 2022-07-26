@@ -36,7 +36,8 @@ const JoinGameButtons = ({ roomCode, playerName }: JoinGameProps) => {
 		<>
 			<BackButton />
 			<Link
-				to={isValid ? `/gameArea/joinGame-${roomCode}` : '#'}
+				// to={isValid ? `/gameArea/joinGame-${roomCode}` : '#'}
+				to={isValid ? `/gameArea/joinGame` : '#'}
 				className='button-style button-color-one w-24'
 				onClick={() => joinRoom(playerName, roomCode)}
 			>
