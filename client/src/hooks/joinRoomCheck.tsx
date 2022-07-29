@@ -7,10 +7,10 @@ import { socket } from '../App';
 
 // TODO: need to grab room codes from server
 
-type ValidationProps = {
+interface ValidationProps {
 	name: string;
 	roomId: string;
-};
+}
 
 export function validationCheck({ name, roomId }: ValidationProps) {
 	let valid: boolean;
@@ -18,6 +18,7 @@ export function validationCheck({ name, roomId }: ValidationProps) {
 
 	socket.emit('check-room', { room: roomId }, (response: any) => {
 		checkRoom(response);
+		console.log(response);
 	});
 
 	const checkRoom = (response: any) => {

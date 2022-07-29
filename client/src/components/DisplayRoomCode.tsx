@@ -11,7 +11,7 @@ const DisplayRoomCode = ({ codeGenerated }: DisplayRoomCodeProps) => {
 				<h2 className='text-3xl mb-3'>Waiting for player to connect...</h2>
 				<p>Give your friend the following room id to connect</p>
 				<div className='flex gap-6 flex-col justify-center items-center w-2/3'>
-					<p className='text-2xl flex justify-center items-center font-semibold pb-2 border-b-2 border-white w-full'>{codeGenerated}</p>
+					<p className='text-xl flex justify-center items-center font-semibold pb-2 border-b-2 border-white w-full'>{codeGenerated}</p>
 					<button className='py-1 px-3 text-lg rounded-sm font-bold bg-white text-black'>Copy</button>
 				</div>
 			</div>
