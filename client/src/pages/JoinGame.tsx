@@ -14,24 +14,14 @@ const JoinGame = () => {
 
 	const setRoomId = (event: any) => {
 		setIsRoomCode(event.target.value);
-
-		const { valid, roomSpace } = validationCheck({ name: isPlayerName, roomId: isRoomCode });
-		console.log(roomSpace);
-		console.log(valid);
 	};
 
-	// setIsValid(roomSpace);
-	// setIsNameEntered(valid);
+	useEffect(() => {
+		const { valid, roomSpace } = validationCheck({ name: isPlayerName, roomId: isRoomCode });
 
-	// const joinRoom = (name: string, roomId: string) => {
-	// 	// Checks to see if all finds are met before
-
-	// 	const { valid, roomSpace } = validationCheck({ name: name, roomId: roomId });
-	// 	console.log(roomSpace);
-	// 	console.log(valid);
-	// 	setIsValid(roomSpace);
-	// 	setIsNameEntered(valid);
-	// };
+		setIsValid(roomSpace);
+		setIsNameEntered(valid);
+	}, [isRoomCode]);
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
@@ -39,7 +29,7 @@ const JoinGame = () => {
 				<input type='text' className='input-field' placeholder='Enter Name' maxLength={15} value={isPlayerName} onChange={setName} />
 				<input type='text' className='input-field' placeholder='Room ID' value={isRoomCode} onChange={setRoomId} maxLength={20} />
 				<div className='flex justify-around mt-4'>
-					<JoinGameButtons roomCode={isRoomCode} playerName={isPlayerName} isValid={isValid} isNameEntered={isNameEntered} />
+					<JoinGameButtons isValid={isValid} isNameEntered={isNameEntered} roomCode={isRoomCode} />
 				</div>
 			</div>
 		</div>

@@ -14,7 +14,7 @@ interface ValidationProps {
 
 export function validationCheck({ name, roomId }: ValidationProps) {
 	let valid: boolean;
-	const [roomSpace, setRoomSpace] = useState(true);
+	let roomSpace: boolean = true;
 
 	socket.emit('check-room', { room: roomId }, (response: any) => {
 		checkRoom(response);
@@ -22,12 +22,12 @@ export function validationCheck({ name, roomId }: ValidationProps) {
 	});
 
 	const checkRoom = (response: any) => {
-		setRoomSpace(response);
+		roomSpace = response;
 	};
 
 	console.log(roomSpace);
 
-	if (name.length !== 0 && roomId.length !== 0 && roomId.length === 3 && roomSpace) {
+	if (name.length !== 0 && roomId.length !== 0 && roomId.length === 20 && roomSpace) {
 		valid = true;
 	} else {
 		valid = false;
