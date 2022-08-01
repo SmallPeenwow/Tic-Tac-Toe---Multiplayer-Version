@@ -40,6 +40,38 @@ io.on('connection', function (socket: any) {
 		if (!(socket.rooms.size <= 2)) {
 			callback(false);
 		}
+
+		// Using socket version 4
+
+		// let r = socket.adapter.rooms;
+
+		// r.forEach((value: string, key: string) => {
+		// 	console.log(key, value);
+		// 	console.log(value);
+		// });
+
+		// let clients = io.sockets.adapter.rooms.get(room);
+		// console.log(clients);
+
+		// let roomUsers =  io.in(`${room}`).fetchSockets();
+		// console.log(roomUsers); // could work should just make function for async
+
+		// io.in(room).clients((err: any, clients: any) => {
+		// 	console.log('tt', clients);
+		// });
+
+		// let roster = io.sockets.clients(room);
+		// roster.forEach((client: any) => {
+		// 	console.log('ted', client);
+		// });
+
+		console.log(socket.adapter.rooms);
+		// console.log(io.socket.in(room));
+		console.log(socket.room);
+
+		// io.sockets.in(room).emit('event', data); // this is for communicating with custom room
+		// let sids = io.of(`/${room}`).adapter;
+		// console.log(sids);
 	});
 
 	socket.on('join-room', (roomId: string) => {

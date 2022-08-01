@@ -11,19 +11,19 @@ type PlayerNameProp = {
 const EnterGameButtons = ({ playerName }: PlayerNameProp) => {
 	const { codeGenerated } = GeneratorRoomCode();
 
-	const createRoom = (room: string) => {
-		if (playerName.length !== 0) {
-			socket.emit('create-room', room);
-		}
-	};
+	// const createRoom = (room: string) => {
+	// 	if (playerName.length !== 0) {
+	// 		socket.emit('create-room', room);
+	// 	}
+	// };
 
 	return (
 		<>
 			<BackButton />
 			<Link
-				to={playerName.length !== 0 ? `/gameArea/${codeGenerated}` : '#'}
+				to={playerName.length !== 0 ? `/gameArea/${codeGenerated}/startedGame` : '#'}
 				className='button-style button-color-one w-24'
-				onClick={() => createRoom(codeGenerated)}
+				//onClick={() => createRoom(codeGenerated)}
 			>
 				Let's Go
 			</Link>

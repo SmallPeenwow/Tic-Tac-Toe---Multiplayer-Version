@@ -2,6 +2,7 @@ import Board from '../components/Board';
 import { useParams, Link } from 'react-router-dom';
 import { socket } from '../App';
 import DisplayRoomCode from '../components/DisplayRoomCode';
+import { useEffect } from 'react';
 
 // Add onclick for socket.io functions to make the rooms disconnect
 
@@ -9,12 +10,14 @@ import DisplayRoomCode from '../components/DisplayRoomCode';
 // will do a check on server side to see if player join to get rid of DisplayRoomCode
 
 const GameArea = () => {
-	const { type } = useParams();
-	console.log(type);
+	const { id, type } = useParams();
+	console.log(id);
+
+	socket.emit('join-room', id);
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
-			{type !== 'joinGame' ? <DisplayRoomCode codeGenerated={type} /> : ''}
+			{type !== 'joinGame' ? <DisplayRoomCode codeGenerated={id} /> : ''}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
 				<Board />

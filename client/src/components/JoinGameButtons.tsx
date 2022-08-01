@@ -6,19 +6,20 @@ import BackButton from './BackButton';
 type JoinGameProps = {
 	roomCode: string;
 	isValid: boolean;
-	isNameEntered: boolean;
+	isRoomAvailable: boolean;
 };
 
-const JoinGameButtons = ({ roomCode, isValid, isNameEntered }: JoinGameProps) => {
+const JoinGameButtons = ({ roomCode, isValid, isRoomAvailable }: JoinGameProps) => {
+	let joinGameValidation = isValid === true && isRoomAvailable === true ? true : false;
+	console.log(joinGameValidation);
+
 	const joinRoom = (valid: boolean, name: boolean, roomId: string) => {
-		if (name) {
-			if (valid) {
-				socket.emit('join-room', roomId);
-			} else {
-				console.log('The room you trying to access already has two players'); // Will get snackbar later for this
-			}
-		} else {
+		if (!name) {
 			console.log('name is empty'); // Will be used for snackbar
+			if (!valid) {
+				console.log('The room you trying to access already has two players'); // Will get snackbar later for this
+				// socket.emit('join-room', roomId);
+			}
 		}
 	};
 
@@ -26,10 +27,10 @@ const JoinGameButtons = ({ roomCode, isValid, isNameEntered }: JoinGameProps) =>
 		<>
 			<BackButton />
 			<Link
-				// to={isValid ? `/gameArea/joinGame-${roomCode}` : '#'}
-				to={isValid ? `/gameArea/joinGame` : '#'}
+				to={isValid ? `/gameArea/${roomCode}/joinGame` : '#'}
+				// to={joinGameValidation ? `/gameArea/joinGame` : '#'}
 				className='button-style button-color-one w-24'
-				onClick={() => joinRoom(isValid, isNameEntered, roomCode)}
+				onClick={() => joinRoom(isValid, isRoomAvailable, roomCode)}
 			>
 				Let's Go
 			</Link>

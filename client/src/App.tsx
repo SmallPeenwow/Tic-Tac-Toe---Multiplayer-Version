@@ -27,7 +27,7 @@ function App() {
 				<Route path='/' element={<LandingPage />} />
 				<Route path='/startNew' element={<StartNew />} />
 				<Route path='/JoinGame' element={<JoinGame />} />
-				<Route path='/gameArea/:type' element={<GameArea />} />
+				<Route path='/gameArea/:id/:type' element={<GameArea />} />
 			</Routes>
 		</>
 	);
