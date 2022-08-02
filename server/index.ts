@@ -36,27 +36,10 @@ io.on('connection', function (socket: any) {
 	});
 
 	//callBack: function // should check the room number that has been sent to it
-	socket.on('check-room', async (room: string, callback: any) => {
-		// if (!(socket.rooms.size <= 2)) {
-		// 	callback(false);
-		// }
+	socket.on('check-room', (room: string, callback: any) => {
+		let roomSpace = checkRoomFunction(socket, room);
 
-		// Converts room to string because comes as an object
-		let valueOne = room === null && undefined ? 'null' : Object.values(room)[0];
-
-		// Checks if there are 2 players are in a room together and sends back false if there are 2 players
-		socket.adapter.rooms.forEach((value: any, key: any) => {
-			if (key === valueOne && value.size === 2) {
-				callback(false);
-			}
-		});
-
-		// const socketsId = await fetchUsers(valueOne); // Possibly could be used
-		// console.log('socketId', socketsId.rooms);
-		// for (const s of socketsId) {
-		// 	console.log(s.id);
-		// 	console.log(s.rooms);
-		// }
+		callback(roomSpace);
 	});
 
 	socket.on('join-room', (roomId: string) => {
@@ -83,16 +66,20 @@ io.on('connection', function (socket: any) {
 	});
 });
 
-const fetchUsers = async (room: any) => {
-	// Test this again because of string conversion
-	const sockets = await io.in(room).fetchSockets();
-	//return await io.fetchSockets();
-	return sockets;
-};
+const checkRoomFunction = (socket: any, room: string) => {
+	let roomSpace = true;
 
-const fetchClients = (room: any) => {
-	// Test this again because of string conversion
-	return io.of(`/${room}`).adapter.rooms;
+	// Converts room to string because comes as an object
+	let valueOne = room === null && undefined ? 'null' : Object.values(room)[0];
+
+	// Checks if there are 2 players are in a room together and sends back false if there are 2 players
+	socket.adapter.rooms.forEach((value: any, key: any) => {
+		if (key === valueOne && value.size === 2) {
+			roomSpace = false;
+		}
+	});
+
+	return roomSpace;
 };
 
 http.listen(1338, function () {

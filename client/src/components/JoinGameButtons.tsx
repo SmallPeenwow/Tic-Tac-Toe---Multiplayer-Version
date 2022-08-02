@@ -11,7 +11,6 @@ type JoinGameProps = {
 
 const JoinGameButtons = ({ roomCode, isValid, isRoomAvailable }: JoinGameProps) => {
 	let joinGameValidation = isValid === true && isRoomAvailable === true ? true : false;
-	console.log(joinGameValidation);
 
 	const joinRoom = (valid: boolean, name: boolean, roomId: string) => {
 		if (!name) {
@@ -27,8 +26,7 @@ const JoinGameButtons = ({ roomCode, isValid, isRoomAvailable }: JoinGameProps) 
 		<>
 			<BackButton />
 			<Link
-				to={isValid ? `/gameArea/${roomCode}/joinGame` : '#'}
-				// to={joinGameValidation ? `/gameArea/joinGame` : '#'}
+				to={joinGameValidation ? `/gameArea/${roomCode}/joinGame` : '#'}
 				className='button-style button-color-one w-24'
 				onClick={() => joinRoom(isValid, isRoomAvailable, roomCode)}
 			>
