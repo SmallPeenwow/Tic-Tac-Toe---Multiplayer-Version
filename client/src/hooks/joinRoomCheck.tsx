@@ -18,14 +18,11 @@ export function validationCheck({ name, roomId }: ValidationProps) {
 
 	socket.emit('check-room', { room: roomId }, (response: any) => {
 		checkRoom(response);
-		console.log(response);
 	});
 
 	const checkRoom = (response: any) => {
 		roomSpace = response;
 	};
-
-	console.log(roomSpace);
 
 	if (name.length !== 0 && roomId.length !== 0 && roomId.length === 20 && roomSpace) {
 		valid = true;
