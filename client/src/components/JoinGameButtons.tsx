@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { socket } from '../App';
 
 import BackButton from './BackButton';
 

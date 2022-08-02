@@ -1,11 +1,4 @@
-import { useState } from 'react';
 import { socket } from '../App';
-
-// const sockets =  socket.of('/').adapter.sockets(new Set());
-
-// const s = socket.sockets.adapter.rooms
-
-// TODO: need to grab room codes from server
 
 interface ValidationProps {
 	name: string;
