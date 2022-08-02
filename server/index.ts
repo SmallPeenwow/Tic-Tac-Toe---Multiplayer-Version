@@ -37,37 +37,19 @@ io.on('connection', function (socket: any) {
 
 	//callBack: function // should check the room number that has been sent to it
 	socket.on('check-room', async (room: string, callback: any) => {
-		if (!(socket.rooms.size <= 2)) {
-			callback(false);
-		}
-		// console.log('socket.rooms', socket.rooms);
-		// console.log('socket.id', socket.id);
+		// if (!(socket.rooms.size <= 2)) {
+		// 	callback(false);
+		// }
 
+		// Converts room to string because comes as an object
 		let valueOne = room === null && undefined ? 'null' : Object.values(room)[0];
-		console.log(valueOne); // this changes to sting and could help with the other code please look back into it
 
+		// Checks if there are 2 players are in a room together and sends back false if there are 2 players
 		socket.adapter.rooms.forEach((value: any, key: any) => {
-			if (key === room && value.size !== 2) {
-				console.log(value, key);
+			if (key === valueOne && value.size === 2) {
+				callback(false);
 			}
 		});
-
-		// console.log(
-		// 	'contr',
-		// 	Array.from(socket.adapter.rooms).filter((key, value) => key === room)
-		// );
-
-		//console.log(Array.from(socket.adapter.rooms).filter((r) => r === valueOne));
-
-		console.log(socket.adapter.rooms);
-		// console.log(
-		// 	Object.keys(socket.adapter.rooms)
-		// 		.filter((key) => room.includes(key))
-		// 		.reduce((obj, key) => {
-		// 			obj[key] = socket.adapter.rooms[key];
-		// 			return obj;
-		// 		}, 'null')
-		// );
 
 		// const socketsId = await fetchUsers(valueOne); // Possibly could be used
 		// console.log('socketId', socketsId.rooms);
@@ -75,53 +57,6 @@ io.on('connection', function (socket: any) {
 		// 	console.log(s.id);
 		// 	console.log(s.rooms);
 		// }
-		// //console.log(room.adapter.rooms);
-		// console.log('room', room);
-
-		// let users = fetchClients(valueOne);
-		// console.log('users', users);
-
-		//console.log(room.fetchSockets());
-		//console.log(socket.handshake);
-
-		// Using socket version 4
-
-		// let r = socket.adapter.rooms; // could work if I make room a string
-
-		// r.forEach((value: string, key: string) => {
-		// 	// console.log(key, value);
-		// 	// console.log(key);
-		// 	console.log(value);
-		// 	console.log(key);
-		// 	console.log(room);
-		// 	if (key === room) {
-		// 		const map = new Map();
-		// 		map.set(room, value);
-		// 		console.log(map.size);
-		// 	}
-		// });
-
-		// let clients = io.sockets.adapter.rooms.get(room);
-		// console.log(clients);
-
-		// let roomUsers =  io.in(`${room}`).fetchSockets();
-		// console.log(roomUsers); // could work should just make function for async
-
-		// io.in(room).clients((err: any, clients: any) => {
-		// 	console.log('tt', clients);
-		// });
-
-		// let roster = io.sockets.clients(room);
-		// roster.forEach((client: any) => {
-		// 	console.log('ted', client);
-		// });
-
-		//console.log(socket.adapter.rooms.get(room));
-		// console.log(io.socket.in(room));
-
-		// io.sockets.in(room).emit('event', data); // this is for communicating with custom room
-		// let sids = io.of(`/${room}`).adapter;
-		// console.log(sids);
 	});
 
 	socket.on('join-room', (roomId: string) => {
