@@ -11,9 +11,20 @@ import { useEffect } from 'react';
 
 const GameArea = () => {
 	const { id, type } = useParams();
+	let twoPlayers: boolean = false;
+
 	console.log(id);
+	console.log(type);
 
 	socket.emit('join-room', id);
+
+	// useEffect(() => {
+	// 	socket.emit('join-room', { roomId: id }, (response: boolean) => {
+	// 		twoPlayers = response;
+	// 	});
+	// }, [socket]);
+
+	console.log(twoPlayers);
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>

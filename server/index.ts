@@ -11,7 +11,7 @@ app.get('/', function (req: any, res: any) {
 });
 
 //Whenever someone connects this gets executed
-io.on('connection', function (socket: any) {
+io.on('connection', async function (socket: any) {
 	console.log('A user connected');
 	console.log(socket.id);
 
@@ -36,14 +36,33 @@ io.on('connection', function (socket: any) {
 	});
 
 	//callBack: function // should check the room number that has been sent to it
-	socket.on('check-room', (room: string, callback: any) => {
-		let roomSpace = checkRoomFunction(socket, room);
-
+	await socket.on('check-room', async (room: string, callback: any) => {
+		let roomSpace = await checkRoomFunction(socket, room);
+		console.log(roomSpace);
 		callback(roomSpace);
 	});
 
 	socket.on('join-room', (roomId: string) => {
 		socket.join(roomId);
+	});
+
+	socket.on('join', (roomId: string, callback: any) => {
+		socket.join(roomId);
+		let playersJoin: boolean = false;
+
+		let room = roomId === null && undefined ? 'null' : Object.values(roomId)[0];
+
+		//console.log(socket.adapter.rooms);
+
+		socket.adapter.rooms.forEach((value: any, key: any) => {
+			//console.log(key, value, key === room, value.size);
+			if (key === room && value.size >= 2) {
+				playersJoin = true;
+			}
+		});
+		//console.log(playersJoin);
+
+		callback(playersJoin);
 		// if (socket.rooms.size <= 2) {
 		// 	socket.join(roomId);
 		// 	console.log(roomId);
@@ -67,20 +86,28 @@ io.on('connection', function (socket: any) {
 	});
 });
 
-const checkRoomFunction = (socket: any, room: string) => {
+const checkRoomFunction = async (socket: any, room: string) => {
 	let roomSpace = true;
 
 	// Converts room to string because comes as an object
 	let valueOne = room === null && undefined ? 'null' : Object.values(room)[0];
 
 	// Checks if there are 2 players are in a room together and sends back false if there are 2 players
+	console.log(socket.adapter.rooms);
 	socket.adapter.rooms.forEach((value: any, key: any) => {
-		if (key === valueOne && value.size === 2) {
+		console.log(typeof value.size);
+		if (key === valueOne && value.size >= 2) {
 			roomSpace = false;
 		}
 	});
 
 	return roomSpace;
+};
+
+const getRoomIdString = (roomId: string) => {
+	// Converts room to string because comes as an object
+	let id = roomId === null && undefined ? 'null' : Object.values(roomId)[0];
+	return id;
 };
 
 http.listen(1338, function () {

@@ -14,13 +14,12 @@ const JoinGameButtons = ({ roomCode, isValid, isRoomAvailable }: JoinGameProps) 
 	const joinRoom = (valid: boolean, name: boolean, roomId: string) => {
 		if (!name) {
 			console.log('name is empty'); // Will be used for snackbar
-			if (!valid) {
-				console.log('The room you trying to access already has two players'); // Will get snackbar later for this
-				// socket.emit('join-room', roomId);
-			}
+		} else if (!valid) {
+			console.log('The room you trying to access already has two players'); // Will get snackbar later for this
+			// socket.emit('join-room', roomId);
 		}
 	};
-
+	console.log(joinGameValidation);
 	return (
 		<>
 			<BackButton />
