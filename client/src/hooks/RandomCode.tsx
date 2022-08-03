@@ -8,5 +8,3 @@ export function GeneratorRoomCode() {
 	}
 	return { codeGenerated };
 }
-
-// The code needs to be set to both start and join game

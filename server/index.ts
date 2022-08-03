@@ -11,34 +11,17 @@ app.get('/', function (req: any, res: any) {
 });
 
 //Whenever someone connects this gets executed
-io.on('connection', async function (socket: any) {
+io.on('connection', function (socket: any) {
 	console.log('A user connected');
 	console.log(socket.id);
 
-	// This displays message to user
-	// socket.on('connect-user', (message: any, room: any) => {
-	// 	// if (room !== '') {
-	// 	// 	socket.to(room).emit('message', message);
-	// 	// }
-	// 	console.log(message);
-	// 	//socket.broadcast.emit('receive', message);
-	// });
-
-	// This will be for when the users join the same room
-	// socket.on('join-room', (room: string, callback: any) => {
-	// 	socket.join(room);
-	// 	callback(`Joined ${room}`); // sends message back of room joined // sends back code functions
-	// });
-
 	socket.on('create-room', (room: string) => {
 		socket.join(room);
-		console.log(room);
 	});
 
 	//callBack: function // should check the room number that has been sent to it
-	await socket.on('check-room', async (room: string, callback: any) => {
-		let roomSpace = await checkRoomFunction(socket, room);
-		console.log(roomSpace);
+	socket.on('check-room', (room: string, callback: any) => {
+		let roomSpace = checkRoomFunction(socket, room);
 		callback(roomSpace);
 	});
 
@@ -46,38 +29,26 @@ io.on('connection', async function (socket: any) {
 		socket.join(roomId);
 	});
 
+	// SOmething for the board game to send back response
 	socket.on('join', (roomId: string, callback: any) => {
 		socket.join(roomId);
 		let playersJoin: boolean = false;
 
 		let room = roomId === null && undefined ? 'null' : Object.values(roomId)[0];
 
-		//console.log(socket.adapter.rooms);
-
 		socket.adapter.rooms.forEach((value: any, key: any) => {
-			//console.log(key, value, key === room, value.size);
 			if (key === room && value.size >= 2) {
 				playersJoin = true;
 			}
 		});
-		//console.log(playersJoin);
 
 		callback(playersJoin);
-		// if (socket.rooms.size <= 2) {
-		// 	socket.join(roomId);
-		// 	console.log(roomId);
-		// 	console.log('yes');
-		// 	console.log(socket.rooms.size); // use this to make a check function
-		// } else {
-		// 	console.log(roomId);
-		// 	console.log('no');
-		// 	console.log(socket.rooms.size); // use this to make a check function
-		// }
 	});
 
+	// TODO: Must test this to see if works
 	socket.on('leave-room', (roomId: string) => {
 		socket.leave(roomId);
-		console.log(roomId);
+		console.log('Left');
 	});
 
 	//Whenever someone disconnects this piece of code executed
@@ -86,16 +57,14 @@ io.on('connection', async function (socket: any) {
 	});
 });
 
-const checkRoomFunction = async (socket: any, room: string) => {
+const checkRoomFunction = (socket: any, room: string) => {
 	let roomSpace = true;
 
 	// Converts room to string because comes as an object
 	let valueOne = room === null && undefined ? 'null' : Object.values(room)[0];
 
 	// Checks if there are 2 players are in a room together and sends back false if there are 2 players
-	console.log(socket.adapter.rooms);
 	socket.adapter.rooms.forEach((value: any, key: any) => {
-		console.log(typeof value.size);
 		if (key === valueOne && value.size >= 2) {
 			roomSpace = false;
 		}
@@ -104,11 +73,12 @@ const checkRoomFunction = async (socket: any, room: string) => {
 	return roomSpace;
 };
 
-const getRoomIdString = (roomId: string) => {
-	// Converts room to string because comes as an object
-	let id = roomId === null && undefined ? 'null' : Object.values(roomId)[0];
-	return id;
-};
+//?? Could be used actually
+// const getRoomIdString = (roomId: string) => {
+// 	// Converts room to string because comes as an object
+// 	let id = roomId === null && undefined ? 'null' : Object.values(roomId)[0];
+// 	return id;
+// };
 
 http.listen(1338, function () {
 	console.log('listening on port :1338');

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { socket } from '../App';
 import JoinGameButtons from '../components/JoinGameButtons';
 import { validationCheck } from '../hooks/joinRoomCheck';
 
@@ -17,10 +18,20 @@ const JoinGame = () => {
 	};
 
 	useEffect(() => {
-		const { valid, roomSpace } = validationCheck({ name: isPlayerName, roomId: isRoomCode });
+		const load = async () => {
+			socket.emit('check-room', { room: isRoomCode }, (response: boolean) => {
+				setIsRoomAvailable(response);
+			});
 
-		setIsValid(valid);
-		setIsRoomAvailable(roomSpace);
+			const { valid } = await validationCheck({ name: isPlayerName, roomId: isRoomCode });
+
+			setIsValid(valid);
+			console.log(valid);
+		};
+
+		load().catch((error) => {
+			console.log('fook');
+		});
 	}, [isRoomCode, isPlayerName]);
 
 	return (
