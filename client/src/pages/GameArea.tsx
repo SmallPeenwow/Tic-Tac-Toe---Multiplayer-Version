@@ -2,7 +2,7 @@ import Board from '../components/Board';
 import { useParams, Link } from 'react-router-dom';
 import { socket } from '../App';
 import DisplayRoomCode from '../components/DisplayRoomCode';
-import { useEffect } from 'react';
+import { useState } from 'react';
 
 // Add onclick for socket.io functions to make the rooms disconnect
 
@@ -11,24 +11,21 @@ import { useEffect } from 'react';
 
 const GameArea = () => {
 	const { id, type } = useParams();
-	let twoPlayers: boolean = false;
-
-	console.log(id);
-	console.log(type);
+	const [isPlayerJoined, setIsPlayerJoined] = useState(false);
 
 	socket.emit('join-room', id);
 
-	// useEffect(() => {
-	// 	socket.emit('join-room', { roomId: id }, (response: boolean) => {
-	// 		twoPlayers = response;
-	// 	});
-	// }, [socket]);
+	socket.on('joined', (players: boolean) => {
+		setIsPlayerJoined(players);
+	});
 
-	console.log(twoPlayers);
+	socket.on('left-room', (playerLeft: boolean) => {
+		setIsPlayerJoined(playerLeft);
+	});
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
-			{type !== 'joinGame' ? <DisplayRoomCode codeGenerated={id} /> : ''}
+			{type !== 'joinGame' && !isPlayerJoined ? <DisplayRoomCode codeGenerated={id} /> : ''}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
 				<Board />
@@ -44,7 +41,7 @@ const GameArea = () => {
 						<p>0</p>
 					</div>
 				</div>
-				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28' onClick={() => socket.emit('leave-room', type)}>
+				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28' onClick={() => socket.emit('leave-room', id)}>
 					Rage Quit
 				</Link>
 			</div>

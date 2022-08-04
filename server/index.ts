@@ -13,11 +13,6 @@ app.get('/', function (req: any, res: any) {
 //Whenever someone connects this gets executed
 io.on('connection', function (socket: any) {
 	console.log('A user connected');
-	console.log(socket.id);
-
-	socket.on('create-room', (room: string) => {
-		socket.join(room);
-	});
 
 	//callBack: function // should check the room number that has been sent to it
 	socket.on('check-room', (room: string, callback: any) => {
@@ -27,6 +22,10 @@ io.on('connection', function (socket: any) {
 
 	socket.on('join-room', (roomId: string) => {
 		socket.join(roomId);
+
+		let joined = returnPlayerJoined(socket, roomId); // Needs to return false when two players in room
+
+		io.emit('joined', joined);
 	});
 
 	// SOmething for the board game to send back response
@@ -45,10 +44,12 @@ io.on('connection', function (socket: any) {
 		callback(playersJoin);
 	});
 
-	// TODO: Must test this to see if works
 	socket.on('leave-room', (roomId: string) => {
 		socket.leave(roomId);
-		console.log('Left');
+
+		let leftGame = returnPlayerJoined(socket, roomId); // Needs to return true if there is only 1 player in the room
+
+		io.emit('left-room', leftGame);
 	});
 
 	//Whenever someone disconnects this piece of code executed
@@ -73,12 +74,18 @@ const checkRoomFunction = (socket: any, room: string) => {
 	return roomSpace;
 };
 
-//?? Could be used actually
-// const getRoomIdString = (roomId: string) => {
-// 	// Converts room to string because comes as an object
-// 	let id = roomId === null && undefined ? 'null' : Object.values(roomId)[0];
-// 	return id;
-// };
+// Checks to see when player 2 joins the room
+const returnPlayerJoined = (socket: any, roomId: string) => {
+	let joined = false;
+
+	socket.adapter.rooms.forEach((value: any, key: any) => {
+		if (key === roomId && value.size === 2) {
+			joined = true;
+		}
+	});
+
+	return joined;
+};
 
 http.listen(1338, function () {
 	console.log('listening on port :1338');
