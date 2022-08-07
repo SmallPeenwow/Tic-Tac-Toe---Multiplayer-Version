@@ -8,7 +8,8 @@ const Board = () => {
 	const [isBoard, setIsBoard] = useState(Array(9).fill(''));
 	const [isTotalMoves, setIsTotalMoves] = useState(0);
 
-	const clicked = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+	const clicked = async (event: React.MouseEvent<HTMLDivElement>) => {
+		console.log(isGameEnded);
 		if (isGameEnded) {
 			return;
 		}
@@ -16,11 +17,12 @@ const Board = () => {
 		// The number of the div data-square
 		const squareValue = parseInt((event.target as HTMLDivElement).dataset.square ?? 'null');
 
-		if (isBoard[squareValue] === null) {
-			//await insertInto2DArray(squareValue);
-			setIsBoard([...isBoard, squareValue]);
-			//setIsBoard[squareValue](isTurn)
-			// isBoard[squareValue] = isTurn;
+		if (isBoard[squareValue] === '') {
+			await updateArray(squareValue);
+			// setIsBoard((items) => {
+			// 	const index = isBoard.length;
+			// 	return [...items.slice(0, index), squareValue, ...items.slice(index)];
+			// });
 
 			(event.target as HTMLDivElement).innerText = isTurn;
 
@@ -29,7 +31,8 @@ const Board = () => {
 			setIsTotalMoves(isTotalMoves + 1);
 		}
 
-		let result = checkWinner();
+		let result = await checkWinner();
+		console.log(result);
 
 		// need to make this less
 		if (result == 'X') {
@@ -44,7 +47,7 @@ const Board = () => {
 		}
 	};
 
-	const checkWinner = () => {
+	const checkWinner = async () => {
 		let lines = [
 			[0, 3, 6],
 			[1, 4, 7],
@@ -57,9 +60,11 @@ const Board = () => {
 		];
 
 		let board = isBoard;
+		console.log('board', board);
 
 		for (let i = 0; i < lines.length; i++) {
 			if (board[lines[i][0]] == board[lines[i][1]] && board[lines[i][1]] == board[lines[i][2]]) {
+				console.log('check', board[lines[i][0]]);
 				return board[lines[i][0]];
 			}
 		}
@@ -70,24 +75,23 @@ const Board = () => {
 	};
 
 	// put into hooks folder later
-	const insertInto2DArray = async (number: number) => {
-		let arrayCopy = [...isBoard];
-		let firstRowNumber = number > 2 ? 1 : number > 5 ? 2 : 0;
-
-		arrayCopy[firstRowNumber];
+	const updateArray = async (number: number) => {
+		const arrayCopy = [...isBoard];
+		arrayCopy[number] = isTurn;
+		setIsBoard(arrayCopy);
 	};
 
 	return (
 		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={(e) => clicked(e)}>
-			<div className='border-r-2 border-b-2' data-square='0'></div>
-			<div className='border-b-2 border-r-2' data-square='1'></div>
-			<div className='border-b-2' data-square='2'></div>
-			<div className='border-b-2 border-r-2' data-square='3'></div>
-			<div className='border-b-2 border-r-2' data-square='4'></div>
-			<div className='border-b-2' data-square='5'></div>
-			<div className='border-r-2' data-square='6'></div>
-			<div className='border-r-2' data-square='7'></div>
-			<div data-square='8'></div>
+			<div className='square border-r-2 border-b-2' data-square='0'></div>
+			<div className='square border-b-2 border-r-2' data-square='1'></div>
+			<div className='square border-b-2' data-square='2'></div>
+			<div className='square border-b-2 border-r-2' data-square='3'></div>
+			<div className='square border-b-2 border-r-2' data-square='4'></div>
+			<div className='square border-b-2' data-square='5'></div>
+			<div className='square border-r-2' data-square='6'></div>
+			<div className='square border-r-2' data-square='7'></div>
+			<div className='square' data-square='8'></div>
 		</div>
 	);
 };
