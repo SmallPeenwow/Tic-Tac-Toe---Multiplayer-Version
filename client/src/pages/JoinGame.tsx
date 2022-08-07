@@ -26,7 +26,6 @@ const JoinGame = () => {
 			const { valid } = await validationCheck({ name: isPlayerName, roomId: isRoomCode });
 
 			setIsValid(valid);
-			console.log(valid);
 		};
 
 		load().catch((error) => {

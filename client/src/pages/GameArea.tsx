@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 // Must make check to see who started and joined game
 // will do a check on server side to see if player join to get rid of DisplayRoomCode
+// TODO: leave-room socket doesn't work without an error of memory leak
 
 const GameArea = () => {
 	const { id, type } = useParams();

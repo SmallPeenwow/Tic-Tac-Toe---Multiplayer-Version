@@ -6,19 +6,7 @@ import StartNew from './pages/StartNew';
 import { io } from 'Socket.io-client';
 
 export const socket = io('http://localhost:1338');
-socket.on('connect', () => {
-	// socket.emit('connect-user', 'peen');
-	//socket.emit('join-room, room'); // room is a unique room name
-	// console.log(socket.id);
-	//This is part of a callback
-	// socket.emit('join-room', room, message => {
-	// 	console.log(message);
-	// })
-});
-
-// socket.on('receive', (message) => {
-// 	console.log('message');
-// });
+socket.on('connect', () => {});
 
 function App() {
 	return (
