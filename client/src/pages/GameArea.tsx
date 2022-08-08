@@ -23,6 +23,7 @@ const GameArea = () => {
 
 	socket.on('left-room', (playerLeft: boolean) => {
 		setIsPlayerJoined(playerLeft);
+		// () => socket.on('leave-room', id) // was on the onClick for Rage Quit
 	});
 
 	return (
@@ -30,7 +31,7 @@ const GameArea = () => {
 			{type !== 'joinGame' && !isPlayerJoined ? <DisplayRoomCode codeGenerated={id} /> : ''}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
-				<Board />
+				<Board roomId={id} />
 				<h2 className='border-b-2 border-b-white w-72 text-2xl'>Score Board</h2>
 				<div className='flex justify-center text-xl'>
 					<div className='flex capitalize flex-col p-2 px-4 w-28 overflow-hidden'>
@@ -44,7 +45,7 @@ const GameArea = () => {
 						<p>0</p>
 					</div>
 				</div>
-				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28' onClick={() => socket.emit('leave-room', id)}>
+				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28'>
 					Rage Quit
 				</Link>
 			</div>

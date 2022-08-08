@@ -28,7 +28,7 @@ io.on('connection', function (socket: any) {
 		io.emit('joined', joined);
 	});
 
-	// SOmething for the board game to send back response
+	// ?? not being used at all //SOmething for the board game to send back response
 	socket.on('join', (roomId: string, callback: any) => {
 		socket.join(roomId);
 		let playersJoin: boolean = false;
@@ -44,12 +44,18 @@ io.on('connection', function (socket: any) {
 		callback(playersJoin);
 	});
 
+	// Must either make it the second player leaves when player one leaves
 	socket.on('leave-room', (roomId: string) => {
 		socket.leave(roomId);
 
 		let leftGame = returnPlayerJoined(socket, roomId); // Needs to return true if there is only 1 player in the room
 
 		io.emit('left-room', leftGame);
+	});
+
+	// Return the X or O value
+	socket.on('board-function', (room: string, boardArray: Array<string>[], isTurn: string) => {
+		socket.to(room).emit('board-turn', boardArray, isTurn);
 	});
 
 	//Whenever someone disconnects this piece of code executed

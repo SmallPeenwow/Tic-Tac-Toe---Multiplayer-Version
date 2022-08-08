@@ -1,7 +1,12 @@
 //import React, { Component } from 'react'
 import { useEffect, useState } from 'react';
+import { socket } from '../App';
 
-const Board = () => {
+type BoardProps = {
+	roomId: string | undefined;
+};
+
+const Board = ({ roomId }: BoardProps) => {
 	const [isWinner, setIsWinner] = useState('');
 	const [isTurn, setIsTurn] = useState('X');
 	const [isGameEnded, setIsGameEnded] = useState(false);
@@ -10,6 +15,12 @@ const Board = () => {
 
 	// This this the variable used to check to see which player one and using the useState to keep the data
 	const boardArray: Array<string> = isBoard;
+
+	// socket.on('board-turn', (isTurn: string, boardArray: Array<string>) => {});
+	// socket.on('board-turn', async (event: React.MouseEvent<HTMLDivElement>) => {
+	// 	await clicked(event);
+	// });
+	// ?? still will useState
 
 	const clicked = async (event: React.MouseEvent<HTMLDivElement>) => {
 		// Will stop the rest of the code from running when is true
@@ -23,10 +34,11 @@ const Board = () => {
 		if (isBoard[squareValue] === '') {
 			let newArray: Array<string> = await updateArray(squareValue, isBoard);
 
-			setIsBoard(newArray); // This doesn't render on the first click
+			//setIsBoard(newArray); // This doesn't render on the first click
+			console.log('set', newArray);
 			boardArray.splice(0, isBoard.length, ...newArray);
 
-			(event.target as HTMLDivElement).innerText = isTurn;
+			(event.target as HTMLDivElement).textContent = isTurn;
 
 			setIsTurn(isTurn == 'X' ? 'O' : 'X');
 
@@ -46,6 +58,8 @@ const Board = () => {
 			setIsGameEnded(true);
 			setIsWinner('draw');
 		}
+
+		socket.emit('board-function', roomId, boardArray, isTurn);
 	};
 
 	const checkWinner = async (boardArray: Array<string>) => {
@@ -81,17 +95,44 @@ const Board = () => {
 		return arrayCopy;
 	};
 
+	// Renders to many times and win check is behind
+	useEffect(() => {
+		socket.on('board-turn', (array: string[], turn: string) => {
+			console.log('on', array);
+			setIsBoard(array);
+			setIsTurn(turn == 'X' ? 'O' : 'X');
+		});
+	}, [isBoard]);
+
 	return (
 		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={(e) => clicked(e)}>
-			<div className='square border-r-2 border-b-2' data-square='0'></div>
-			<div className='square border-b-2 border-r-2' data-square='1'></div>
-			<div className='square border-b-2' data-square='2'></div>
-			<div className='square border-b-2 border-r-2' data-square='3'></div>
-			<div className='square border-b-2 border-r-2' data-square='4'></div>
-			<div className='square border-b-2' data-square='5'></div>
-			<div className='square border-r-2' data-square='6'></div>
-			<div className='square border-r-2' data-square='7'></div>
-			<div className='square' data-square='8'></div>
+			<div className='square border-r-2 border-b-2' data-square='0'>
+				{boardArray[0]}
+			</div>
+			<div className='square border-b-2 border-r-2' data-square='1'>
+				{boardArray[1]}
+			</div>
+			<div className='square border-b-2' data-square='2'>
+				{boardArray[2]}
+			</div>
+			<div className='square border-b-2 border-r-2' data-square='3'>
+				{boardArray[3]}
+			</div>
+			<div className='square border-b-2 border-r-2' data-square='4'>
+				{boardArray[4]}
+			</div>
+			<div className='square border-b-2' data-square='5'>
+				{boardArray[5]}
+			</div>
+			<div className='square border-r-2' data-square='6'>
+				{boardArray[6]}
+			</div>
+			<div className='square border-r-2' data-square='7'>
+				{boardArray[7]}
+			</div>
+			<div className='square' data-square='8'>
+				{boardArray[8]}
+			</div>
 		</div>
 	);
 };
