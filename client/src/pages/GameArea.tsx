@@ -21,10 +21,14 @@ const GameArea = () => {
 		setIsPlayerJoined(players);
 	});
 
+	// Will also do a check in here to see if host player leaves then other player must return to home page
 	socket.on('left-room', (playerLeft: boolean) => {
 		setIsPlayerJoined(playerLeft);
-		// () => socket.on('leave-room', id) // was on the onClick for Rage Quit
 	});
+
+	const leaveGame = (playerId: string | undefined, playerType: string | undefined) => {
+		socket.emit('leave-room', playerId, playerType);
+	};
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
@@ -45,7 +49,7 @@ const GameArea = () => {
 						<p>0</p>
 					</div>
 				</div>
-				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28'>
+				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28' onClick={() => leaveGame(id, type)}>
 					Rage Quit
 				</Link>
 			</div>

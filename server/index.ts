@@ -28,34 +28,24 @@ io.on('connection', function (socket: any) {
 		io.emit('joined', joined);
 	});
 
-	// ?? not being used at all //SOmething for the board game to send back response
-	socket.on('join', (roomId: string, callback: any) => {
-		socket.join(roomId);
-		let playersJoin: boolean = false;
-
-		let room = roomId === null && undefined ? 'null' : Object.values(roomId)[0];
-
-		socket.adapter.rooms.forEach((value: any, key: any) => {
-			if (key === room && value.size >= 2) {
-				playersJoin = true;
-			}
-		});
-
-		callback(playersJoin);
-	});
-
 	// Must either make it the second player leaves when player one leaves
-	socket.on('leave-room', (roomId: string) => {
+	socket.on('leave-room', (roomId: string, playerType: string) => {
 		socket.leave(roomId);
 
 		let leftGame = returnPlayerJoined(socket, roomId); // Needs to return true if there is only 1 player in the room
+		console.log(socket.adapter.rooms);
+
+		// This makes all the players leave and the room not exist
+		if (playerType === 'startedGame') {
+			io.in(roomId).socketsLeave(roomId);
+		}
 
 		io.emit('left-room', leftGame);
 	});
 
 	// Return the X or O value
-	socket.on('board-function', (room: string, boardArray: Array<string>[], isTurn: string) => {
-		socket.to(room).emit('board-turn', boardArray, isTurn);
+	socket.on('board-function', (room: string, boardArray: Array<string>[], isTurn: string, gameEnded: boolean) => {
+		socket.to(room).emit('board-turn', boardArray, isTurn, gameEnded);
 	});
 
 	//Whenever someone disconnects this piece of code executed

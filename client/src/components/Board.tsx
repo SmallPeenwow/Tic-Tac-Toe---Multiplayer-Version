@@ -16,11 +16,7 @@ const Board = ({ roomId }: BoardProps) => {
 	// This this the variable used to check to see which player one and using the useState to keep the data
 	const boardArray: Array<string> = isBoard;
 
-	// socket.on('board-turn', (isTurn: string, boardArray: Array<string>) => {});
-	// socket.on('board-turn', async (event: React.MouseEvent<HTMLDivElement>) => {
-	// 	await clicked(event);
-	// });
-	// ?? still will useState
+	// TODO: might need to keep track of X and O on server side to player id in room
 
 	const clicked = async (event: React.MouseEvent<HTMLDivElement>) => {
 		// Will stop the rest of the code from running when is true
@@ -34,8 +30,6 @@ const Board = ({ roomId }: BoardProps) => {
 		if (isBoard[squareValue] === '') {
 			let newArray: Array<string> = await updateArray(squareValue, isBoard);
 
-			//setIsBoard(newArray); // This doesn't render on the first click
-			console.log('set', newArray);
 			boardArray.splice(0, isBoard.length, ...newArray);
 
 			(event.target as HTMLDivElement).textContent = isTurn;
@@ -45,21 +39,9 @@ const Board = ({ roomId }: BoardProps) => {
 			setIsTotalMoves(isTotalMoves + 1);
 		}
 
-		let result = await checkWinner(boardArray);
+		let gameEnd = await checkWinner(boardArray);
 
-		// need to make this less
-		if (result == 'X') {
-			setIsGameEnded(true);
-			setIsWinner('X');
-		} else if (result == 'O') {
-			setIsGameEnded(true);
-			setIsWinner('O');
-		} else if (result == 'draw') {
-			setIsGameEnded(true);
-			setIsWinner('draw');
-		}
-
-		socket.emit('board-function', roomId, boardArray, isTurn);
+		socket.emit('board-function', roomId, boardArray, isTurn, gameEnd);
 	};
 
 	const checkWinner = async (boardArray: Array<string>) => {
@@ -75,16 +57,31 @@ const Board = ({ roomId }: BoardProps) => {
 		];
 
 		let board = boardArray;
+		let result;
+		let gameEnd = false;
 
 		for (let i = 0; i < lines.length; i++) {
 			if (board[lines[i][0]] == board[lines[i][1]] && board[lines[i][1]] == board[lines[i][2]]) {
-				return board[lines[i][0]];
+				result = board[lines[i][0]];
 			}
 		}
 
 		if (isTotalMoves == 9) {
-			return 'draw';
+			result = 'draw';
 		}
+
+		gameEnd = result === 'X' || result === 'O' || result === 'draw' ? true : false;
+
+		// need to make this less
+		if (result == 'X') {
+			setIsWinner('X');
+		} else if (result == 'O') {
+			setIsWinner('O');
+		} else if (result == 'draw') {
+			setIsGameEnded(true);
+		}
+		setIsGameEnded(gameEnd);
+		return gameEnd;
 	};
 
 	// Used to update the board useState
@@ -97,12 +94,13 @@ const Board = ({ roomId }: BoardProps) => {
 
 	// Renders to many times and win check is behind
 	useEffect(() => {
-		socket.on('board-turn', (array: string[], turn: string) => {
-			console.log('on', array);
+		socket.on('board-turn', async (array: string[], turn: string, gameEnded: boolean) => {
+			console.log('ythis');
 			setIsBoard(array);
 			setIsTurn(turn == 'X' ? 'O' : 'X');
+			setIsGameEnded(gameEnded);
 		});
-	}, [isBoard]);
+	}, [isTotalMoves]);
 
 	return (
 		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={(e) => clicked(e)}>
