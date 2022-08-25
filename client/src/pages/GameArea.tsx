@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { socket } from '../App';
 import DisplayRoomCode from '../components/DisplayRoomCode';
 import { useState } from 'react';
+import DisplayPlayerTurn from '../components/DisplayPlayerTurn';
 
 // Add onclick for socket.io functions to make the rooms disconnect
 
@@ -14,6 +15,7 @@ const GameArea = () => {
 	const { id, type } = useParams();
 	const [isPlayerJoined, setIsPlayerJoined] = useState(false);
 	const [isTrackScore, setIsTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
+	const [isShowed, setIsShowed] = useState(false);
 
 	socket.emit('join-room', id);
 
@@ -33,6 +35,7 @@ const GameArea = () => {
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			{type !== 'joinGame' && !isPlayerJoined ? <DisplayRoomCode codeGenerated={id} /> : ''}
+			{isPlayerJoined ? <DisplayPlayerTurn player={type} show={setIsShowed} seen={isShowed} /> : ''}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
 				<Board roomId={id} playerCheck={type} />
@@ -40,12 +43,12 @@ const GameArea = () => {
 				<div className='flex justify-center text-xl'>
 					<div className='flex capitalize flex-col p-2 px-4 w-28 overflow-hidden'>
 						{/* Need to do an emit with socket.io for player display with you and player 1 ?? Will probably need to do something on the server side for this */}
-						<p>{type === 'startedGame' ? 'You' : 'Player 1'}</p>
+						<p>You</p>
 						<p>0</p>
 					</div>
 					<div className='border-l-2 border-l-white'></div>
 					<div className='flex capitalize flex-col p-2 px-4 w-28 overflow-hidden'>
-						<p>{type === 'startedGame' ? 'You' : 'Player 2'}</p>
+						<p>{type === 'startedGame' ? 'Player 2' : 'Player 1'}</p>
 						<p>0</p>
 					</div>
 				</div>
