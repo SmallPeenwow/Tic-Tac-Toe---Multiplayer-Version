@@ -8,13 +8,22 @@ const JoinGame = () => {
 	const [isRoomCode, setIsRoomCode] = useState('');
 	const [isValid, setIsValid] = useState(false);
 	const [isRoomAvailable, setIsRoomAvailable] = useState(false);
+	const [isNameEmpty, setNameIsEmpty] = useState(false);
+	const [isRoomIdEmpty, setRoomIdIsEmpty] = useState(false);
 
 	const setName = (event: any) => {
 		setIsPlayerName(event.target.value);
+		setValuesTrue();
 	};
 
 	const setRoomId = (event: any) => {
 		setIsRoomCode(event.target.value);
+		setValuesTrue();
+	};
+
+	const setValuesTrue = () => {
+		setNameIsEmpty(false);
+		setRoomIdIsEmpty(false);
 	};
 
 	useEffect(() => {
@@ -36,10 +45,31 @@ const JoinGame = () => {
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			<div className='flex flex-col gap-10'>
-				<input type='text' className='input-field' placeholder='Enter Name' maxLength={15} value={isPlayerName} onChange={setName} />
-				<input type='text' className='input-field' placeholder='Room ID' value={isRoomCode} onChange={setRoomId} maxLength={20} />
+				<input
+					type='text'
+					className={isNameEmpty ? 'input-field input-error' : 'input-field input-correct'}
+					placeholder='Enter Name'
+					maxLength={15}
+					value={isPlayerName}
+					onChange={setName}
+				/>
+				<input
+					type='text'
+					className={isRoomIdEmpty ? 'input-field input-error' : 'input-field input-correct'}
+					placeholder='Room ID'
+					value={isRoomCode}
+					onChange={setRoomId}
+					maxLength={20}
+				/>
 				<div className='flex justify-around mt-4'>
-					<JoinGameButtons isValid={isValid} isRoomAvailable={isRoomAvailable} roomCode={isRoomCode} />
+					<JoinGameButtons
+						isValid={isValid}
+						isRoomAvailable={isRoomAvailable}
+						roomCode={isRoomCode}
+						setNameEmpty={setNameIsEmpty}
+						setRoomIdEmpty={setRoomIdIsEmpty}
+						playerName={isPlayerName}
+					/>
 				</div>
 			</div>
 		</div>
