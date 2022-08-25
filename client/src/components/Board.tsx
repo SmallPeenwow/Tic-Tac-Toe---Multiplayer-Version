@@ -4,14 +4,16 @@ import { socket } from '../App';
 
 type BoardProps = {
 	roomId: string | undefined;
+	playerCheck: string | undefined; // This is either startedGame OR joinGame
 };
 
-const Board = ({ roomId }: BoardProps) => {
+const Board = ({ roomId, playerCheck }: BoardProps) => {
 	const [isWinner, setIsWinner] = useState('');
 	const [isTurn, setIsTurn] = useState('X');
 	const [isGameEnded, setIsGameEnded] = useState(false);
 	const [isBoard, setIsBoard] = useState(Array(9).fill(''));
 	const [isTotalMoves, setIsTotalMoves] = useState(1);
+	const [isPlayersTurn, setIsPlayersTurn] = useState('startedGame');
 
 	// This this the variable used to check to see which player one and using the useState to keep the data
 	const boardArray: Array<string> = isBoard;
@@ -20,7 +22,7 @@ const Board = ({ roomId }: BoardProps) => {
 
 	const clicked = async (event: React.MouseEvent<HTMLDivElement>) => {
 		// Will stop the rest of the code from running when is true
-		if (isGameEnded) {
+		if (isGameEnded || isPlayersTurn !== playerCheck) {
 			return;
 		}
 
@@ -37,11 +39,12 @@ const Board = ({ roomId }: BoardProps) => {
 			setIsTurn(isTurn == 'X' ? 'O' : 'X');
 
 			setIsTotalMoves(isTotalMoves + 1);
+			setIsPlayersTurn(playerCheck === 'startedGame' ? 'joinGame' : 'startedGame');
 		}
 
 		let gameEnd = await checkWinner(boardArray);
 
-		socket.emit('board-function', roomId, boardArray, isTurn, gameEnd);
+		socket.emit('board-function', roomId, boardArray, isTurn, gameEnd, playerCheck);
 	};
 
 	const checkWinner = async (boardArray: Array<string>) => {
@@ -94,13 +97,14 @@ const Board = ({ roomId }: BoardProps) => {
 
 	// Renders to many times and win check is behind
 	useEffect(() => {
-		socket.on('board-turn', async (array: string[], turn: string, gameEnded: boolean) => {
+		socket.on('board-turn', async (array: string[], turn: string, gameEnded: boolean, playerTurn: string) => {
 			console.log('ythis');
 			setIsBoard(array);
 			setIsTurn(turn == 'X' ? 'O' : 'X');
 			setIsGameEnded(gameEnded);
+			setIsPlayersTurn(playerTurn);
 		});
-	}, [isTotalMoves]);
+	}, [isBoard]);
 
 	return (
 		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={(e) => clicked(e)}>
