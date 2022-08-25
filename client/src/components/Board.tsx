@@ -5,15 +5,19 @@ import { socket } from '../App';
 type BoardProps = {
 	roomId: string | undefined;
 	playerCheck: string | undefined; // This is either startedGame OR joinGame
+	setWinner: (active: string) => void;
+	isTurn: string;
+	setIsTurn: (active: string) => void;
+	isPlayersTurn: string | undefined;
+	setIsPlayersTurn: (active: string) => void;
 };
 
-const Board = ({ roomId, playerCheck }: BoardProps) => {
-	const [isWinner, setIsWinner] = useState('');
-	const [isTurn, setIsTurn] = useState('X');
+const Board = ({ roomId, playerCheck, setWinner, isTurn, setIsTurn, isPlayersTurn, setIsPlayersTurn }: BoardProps) => {
+	//const [isTurn, setIsTurn] = useState('X');
 	const [isGameEnded, setIsGameEnded] = useState(false);
 	const [isBoard, setIsBoard] = useState(Array(9).fill(''));
 	const [isTotalMoves, setIsTotalMoves] = useState(1);
-	const [isPlayersTurn, setIsPlayersTurn] = useState('startedGame');
+	//const [isPlayersTurn, setIsPlayersTurn] = useState('startedGame');
 
 	// This this the variable used to check to see which player one and using the useState to keep the data
 	const boardArray: Array<string> = isBoard;
@@ -77,11 +81,15 @@ const Board = ({ roomId, playerCheck }: BoardProps) => {
 
 		// need to make this less
 		if (result == 'X') {
-			setIsWinner('X');
+			// Will use these to display winner screen
+			setWinner('startedGame');
+			//setIsWinner('X');
 		} else if (result == 'O') {
-			setIsWinner('O');
+			setWinner('joinGame');
+			//setIsWinner('O');
 		} else if (result == 'draw') {
-			setIsGameEnded(true);
+			setWinner('Draw');
+			//setIsGameEnded(true);
 		}
 		setIsGameEnded(gameEnd);
 		return gameEnd;

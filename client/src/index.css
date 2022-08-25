@@ -31,5 +31,5 @@
 }
 
 .display-turn-once {
-	@apply absolute bg-black/40 top-0 right-0 left-0 bottom-0 flex justify-start items-center flex-col text-7xl z-50 gap-3 p-3;
+	@apply text-5xl pb-5;
 }

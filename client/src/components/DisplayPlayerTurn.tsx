@@ -1,20 +1,12 @@
+import DisplayWinner from '../components/DisplayWinner';
+
 type PlayerProp = {
 	player: string | undefined;
-	seen: boolean;
-	show: (active: boolean) => void;
+	playerTurn: string;
 };
 
-const DisplayPlayerTurn = ({ player, show, seen }: PlayerProp) => {
-	const setDisplayType = () => {
-		show(true);
-	};
-
-	return (
-		<div className={seen ? 'hidden' : 'display-turn-once'} onClick={setDisplayType}>
-			You Are
-			<div className='text-8xl'>{player === 'startedGame' ? 'X' : 'O'}</div>
-		</div>
-	);
+const DisplayPlayerTurn = ({ player, playerTurn }: PlayerProp) => {
+	return <div className='display-turn-once'>{player === playerTurn ? 'Your' : `Player ${player === 'startedGame' ? "2's" : "1's"}`} Turn</div>;
 };
 
 export default DisplayPlayerTurn;
