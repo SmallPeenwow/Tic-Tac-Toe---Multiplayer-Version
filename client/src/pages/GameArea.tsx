@@ -39,13 +39,13 @@ const GameArea = () => {
 				<h2 className='border-b-2 border-b-white w-72 text-2xl'>Score Board</h2>
 				<div className='flex justify-center text-xl'>
 					<div className='flex capitalize flex-col p-2 px-4 w-28 overflow-hidden'>
-						{/* Need to do an emit with socket.io for player display with you and player 1 */}
-						<p>you</p>
+						{/* Need to do an emit with socket.io for player display with you and player 1 ?? Will probably need to do something on the server side for this */}
+						<p>{type === 'startedGame' ? 'You' : 'Player 1'}</p>
 						<p>0</p>
 					</div>
 					<div className='border-l-2 border-l-white'></div>
 					<div className='flex capitalize flex-col p-2 px-4 w-28 overflow-hidden'>
-						<p>Player2</p>
+						<p>{type === 'startedGame' ? 'You' : 'Player 2'}</p>
 						<p>0</p>
 					</div>
 				</div>
