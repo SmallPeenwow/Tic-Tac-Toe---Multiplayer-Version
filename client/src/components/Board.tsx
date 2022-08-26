@@ -1,4 +1,3 @@
-//import React, { Component } from 'react'
 import { useEffect, useState } from 'react';
 import { socket } from '../App';
 
@@ -6,18 +5,30 @@ type BoardProps = {
 	roomId: string | undefined;
 	playerCheck: string | undefined; // This is either startedGame OR joinGame
 	setWinner: (active: string) => void;
+	isWinner: string | undefined;
 	isTurn: string;
 	setIsTurn: (active: string) => void;
 	isPlayersTurn: string | undefined;
 	setIsPlayersTurn: (active: string) => void;
+	isGameEnded: boolean;
+	setIsGameEnded: (active: boolean) => void;
 };
 
-const Board = ({ roomId, playerCheck, setWinner, isTurn, setIsTurn, isPlayersTurn, setIsPlayersTurn }: BoardProps) => {
-	//const [isTurn, setIsTurn] = useState('X');
-	const [isGameEnded, setIsGameEnded] = useState(false);
+const Board = ({
+	roomId,
+	playerCheck,
+	setWinner,
+	isWinner,
+	isTurn,
+	setIsTurn,
+	isPlayersTurn,
+	setIsPlayersTurn,
+	isGameEnded,
+	setIsGameEnded,
+}: BoardProps) => {
+	//const [isGameEnded, setIsGameEnded] = useState(false);
 	const [isBoard, setIsBoard] = useState(Array(9).fill(''));
 	const [isTotalMoves, setIsTotalMoves] = useState(1);
-	//const [isPlayersTurn, setIsPlayersTurn] = useState('startedGame');
 
 	// This this the variable used to check to see which player one and using the useState to keep the data
 	const boardArray: Array<string> = isBoard;
@@ -48,7 +59,7 @@ const Board = ({ roomId, playerCheck, setWinner, isTurn, setIsTurn, isPlayersTur
 
 		let gameEnd = await checkWinner(boardArray);
 
-		socket.emit('board-function', roomId, boardArray, isTurn, gameEnd, playerCheck);
+		socket.emit('board-function', roomId, boardArray, isTurn, gameEnd, playerCheck, isWinner);
 	};
 
 	const checkWinner = async (boardArray: Array<string>) => {
@@ -91,6 +102,7 @@ const Board = ({ roomId, playerCheck, setWinner, isTurn, setIsTurn, isPlayersTur
 			setWinner('Draw');
 			//setIsGameEnded(true);
 		}
+
 		setIsGameEnded(gameEnd);
 		return gameEnd;
 	};
@@ -105,12 +117,12 @@ const Board = ({ roomId, playerCheck, setWinner, isTurn, setIsTurn, isPlayersTur
 
 	// Renders to many times and win check is behind
 	useEffect(() => {
-		socket.on('board-turn', async (array: string[], turn: string, gameEnded: boolean, playerTurn: string) => {
-			console.log('ythis');
+		socket.on('board-turn', async (array: string[], turn: string, gameEnded: boolean, playerTurn: string, winner: string) => {
 			setIsBoard(array);
 			setIsTurn(turn == 'X' ? 'O' : 'X');
 			setIsGameEnded(gameEnded);
 			setIsPlayersTurn(playerTurn);
+			setWinner(winner);
 		});
 	}, [isBoard]);
 

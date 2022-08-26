@@ -6,6 +6,8 @@ const io = require('socket.io')(http, {
 	},
 });
 
+// Can store one games on server side and increase by one depending on if startedGame or joinGame won
+
 app.get('/', function (req: any, res: any) {
 	res.send('Howdy!');
 });
@@ -44,11 +46,14 @@ io.on('connection', function (socket: any) {
 	});
 
 	// Return the X or O value
-	socket.on('board-function', (room: string, boardArray: Array<string>[], isTurn: string, gameEnded: boolean, playerCheck: string) => {
-		playerCheck = playerCheck === 'startedGame' ? 'joinGame' : 'startedGame';
+	socket.on(
+		'board-function',
+		(room: string, boardArray: Array<string>[], isTurn: string, gameEnded: boolean, playerCheck: string, isWinner: string) => {
+			playerCheck = playerCheck === 'startedGame' ? 'joinGame' : 'startedGame';
 
-		socket.to(room).emit('board-turn', boardArray, isTurn, gameEnded, playerCheck);
-	});
+			socket.to(room).emit('board-turn', boardArray, isTurn, gameEnded, playerCheck, isWinner);
+		}
+	);
 
 	//Whenever someone disconnects this piece of code executed
 	socket.on('disconnect', function () {

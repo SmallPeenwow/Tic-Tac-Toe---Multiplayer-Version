@@ -17,6 +17,7 @@ const GameArea = () => {
 	const [isTrackScore, setIsTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
 	const [isWinner, setIsWinner] = useState('');
 	const [isTurn, setIsTurn] = useState('X');
+	const [isGameEnded, setIsGameEnded] = useState(false);
 	const [isPlayersTurn, setIsPlayersTurn] = useState('startedGame');
 
 	socket.emit('join-room', id);
@@ -37,17 +38,20 @@ const GameArea = () => {
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			{type !== 'joinGame' && !isPlayerJoined ? <DisplayRoomCode codeGenerated={id} /> : ''}
-			{isPlayerJoined ? <DisplayPlayerTurn player={type} playerTurn={isPlayersTurn} /> : ''}
+			{isPlayerJoined ? <DisplayPlayerTurn player={type} playerTurn={isPlayersTurn} isWinner={isWinner} isGameEnded={isGameEnded} /> : ''}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
 				<Board
 					roomId={id}
 					playerCheck={type}
 					setWinner={setIsWinner}
+					isWinner={isWinner}
 					isTurn={isTurn}
 					setIsTurn={setIsTurn}
 					isPlayersTurn={isPlayersTurn}
 					setIsPlayersTurn={setIsPlayersTurn}
+					isGameEnded={isGameEnded}
+					setIsGameEnded={setIsGameEnded}
 				/>
 				<h2 className='border-b-2 border-b-white w-72 text-2xl'>Score Board</h2>
 				<div className='flex justify-center text-xl w-72'>
