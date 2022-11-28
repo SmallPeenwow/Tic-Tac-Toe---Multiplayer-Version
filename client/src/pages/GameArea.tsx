@@ -4,12 +4,14 @@ import { socket } from '../App';
 import DisplayRoomCode from '../components/DisplayRoomCode';
 import { useState } from 'react';
 import DisplayPlayerTurn from '../components/DisplayPlayerTurn';
+import PlayAgain from '../components/PlayAgain';
 
 // Add onclick for socket.io functions to make the rooms disconnect
 
 // Must make check to see who started and joined game
 // will do a check on server side to see if player join to get rid of DisplayRoomCode
 // TODO: leave-room socket doesn't work without an error of memory leak
+// TODO: Make text on left empty until player joins
 
 const GameArea = () => {
 	const { id, type } = useParams();
@@ -19,6 +21,8 @@ const GameArea = () => {
 	const [isTurn, setIsTurn] = useState('X');
 	const [isGameEnded, setIsGameEnded] = useState(false);
 	const [isPlayersTurn, setIsPlayersTurn] = useState('startedGame');
+	const [isBoard, setIsBoard] = useState(Array(9).fill(''));
+	const [isTotalMoves, setIsTotalMoves] = useState(1);
 
 	socket.emit('join-room', id);
 
@@ -44,14 +48,18 @@ const GameArea = () => {
 				<Board
 					roomId={id}
 					playerCheck={type}
-					setWinner={setIsWinner}
 					isWinner={isWinner}
 					isTurn={isTurn}
-					setIsTurn={setIsTurn}
 					isPlayersTurn={isPlayersTurn}
-					setIsPlayersTurn={setIsPlayersTurn}
 					isGameEnded={isGameEnded}
+					isBoard={isBoard}
+					isTotalMoves={isTotalMoves}
+					setWinner={setIsWinner}
+					setIsTurn={setIsTurn}
+					setIsPlayersTurn={setIsPlayersTurn}
 					setIsGameEnded={setIsGameEnded}
+					setIsBoard={setIsBoard}
+					setIsTotalMoves={setIsTotalMoves}
 				/>
 				<h2 className='border-b-2 border-b-white w-72 text-2xl'>Score Board</h2>
 				<div className='flex justify-center text-xl w-72'>
@@ -70,6 +78,15 @@ const GameArea = () => {
 					Rage Quit
 				</Link>
 			</div>
+			<PlayAgain
+				isGameEnded={isGameEnded}
+				setIsWinner={setIsWinner}
+				setIsTurn={setIsTurn}
+				setIsGameEnded={setIsGameEnded}
+				setIsPlayersTurn={setIsPlayersTurn}
+				setIsBoard={setIsBoard}
+				setIsTotalMoves={setIsTotalMoves}
+			/>
 		</div>
 	);
 };

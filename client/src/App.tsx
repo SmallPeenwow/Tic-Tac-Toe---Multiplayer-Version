@@ -6,7 +6,9 @@ import StartNew from './pages/StartNew';
 import { io } from 'Socket.io-client';
 
 export const socket = io('http://localhost:1338');
-socket.on('connect', () => {});
+socket.on('connect', () => {
+	console.log(socket.io + ' io');
+});
 
 function App() {
 	return (

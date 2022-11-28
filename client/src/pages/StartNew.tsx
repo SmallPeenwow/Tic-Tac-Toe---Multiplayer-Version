@@ -5,12 +5,8 @@ const StartNew = () => {
 	const [isPlayerName, setIsPlayerName] = useState('');
 	const [isNameEntered, setIsNameEntered] = useState(true);
 
-	const setName = (event: any) => {
-		setIsPlayerName(event.target.value);
-	};
-
-	const checkNameValue = (name: string) => {
-		setIsNameEntered(true);
+	const onPlayerNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setIsPlayerName(e.target.value);
 	};
 
 	return (
@@ -22,10 +18,7 @@ const StartNew = () => {
 					placeholder='Enter Name'
 					maxLength={15}
 					value={isPlayerName}
-					onChange={() => {
-						setName(event);
-						checkNameValue(isPlayerName);
-					}}
+					onChange={onPlayerNameChange}
 				/>
 				<div className='flex justify-around mt-4'>
 					<EnterGameButtons playerName={isPlayerName} setIsNameEntered={setIsNameEntered} />

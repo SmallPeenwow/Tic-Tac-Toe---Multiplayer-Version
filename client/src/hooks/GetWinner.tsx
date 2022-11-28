@@ -3,6 +3,7 @@ type WinnerProps = {
 	isWinner: string | undefined;
 };
 
+//TODO: This not working also
 export function GetWinner({ player, isWinner }: WinnerProps) {
 	let winner: string | undefined;
 	console.log(player);

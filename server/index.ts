@@ -15,6 +15,7 @@ app.get('/', function (req: any, res: any) {
 //Whenever someone connects this gets executed
 io.on('connection', function (socket: any) {
 	console.log('A user connected');
+	// Create variable to check if host or not : TODO
 
 	//callBack: function // should check the room number that has been sent to it
 	socket.on('check-room', (room: string, callback: any) => {
@@ -35,7 +36,6 @@ io.on('connection', function (socket: any) {
 		socket.leave(roomId);
 
 		let leftGame = returnPlayerJoined(socket, roomId); // Needs to return true if there is only 1 player in the room
-		console.log(socket.adapter.rooms);
 
 		// This makes all the players leave and the room not exist
 		if (playerType === 'startedGame') {

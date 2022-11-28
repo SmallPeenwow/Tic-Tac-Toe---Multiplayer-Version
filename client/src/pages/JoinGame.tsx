@@ -21,6 +21,7 @@ const JoinGame = () => {
 		setValuesTrue();
 	};
 
+	// Probably redo this to be more clean : TODO
 	const setValuesTrue = () => {
 		setNameIsEmpty(false);
 		setRoomIdIsEmpty(false);
@@ -66,9 +67,9 @@ const JoinGame = () => {
 						isValid={isValid}
 						isRoomAvailable={isRoomAvailable}
 						roomCode={isRoomCode}
+						playerName={isPlayerName}
 						setNameEmpty={setNameIsEmpty}
 						setRoomIdEmpty={setRoomIdIsEmpty}
-						playerName={isPlayerName}
 					/>
 				</div>
 			</div>
