@@ -1,8 +1,8 @@
 import Board from '../components/Board';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { socket } from '../App';
 import DisplayRoomCode from '../components/DisplayRoomCode';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DisplayPlayerTurn from '../components/DisplayPlayerTurn';
 import PlayAgain from '../components/PlayAgain';
 
@@ -12,10 +12,12 @@ import PlayAgain from '../components/PlayAgain';
 // will do a check on server side to see if player join to get rid of DisplayRoomCode
 // TODO: leave-room socket doesn't work without an error of memory leak
 // TODO: Make text on left empty until player joins
+// TODO: fix socket issues with leaving room and checking room users
+// TODO: For host when other player leaves must default values
 
 const GameArea = () => {
 	const { id, type } = useParams();
-	const [isPlayerJoined, setIsPlayerJoined] = useState(false);
+	const [isPlayerJoined, setIsPlayerJoined] = useState(false); // TODO: check how value is used
 	const [isTrackScore, setIsTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
 	const [isWinner, setIsWinner] = useState('');
 	const [isTurn, setIsTurn] = useState('X');
@@ -23,6 +25,7 @@ const GameArea = () => {
 	const [isPlayersTurn, setIsPlayersTurn] = useState('startedGame');
 	const [isBoard, setIsBoard] = useState(Array(9).fill(''));
 	const [isTotalMoves, setIsTotalMoves] = useState(1);
+	const navigate = useNavigate();
 
 	socket.emit('join-room', id);
 
@@ -30,19 +33,30 @@ const GameArea = () => {
 		setIsPlayerJoined(players);
 	});
 
-	// Will also do a check in here to see if host player leaves then other player must return to home page
-	socket.on('left-room', (playerLeft: boolean) => {
-		setIsPlayerJoined(playerLeft);
-	});
-
-	const leaveGame = (playerId: string | undefined, playerType: string | undefined) => {
-		socket.emit('leave-room', playerId, playerType);
+	const leaveGame = (roomId: string | undefined, playerType: string | undefined) => {
+		socket.emit('leave-room', roomId, playerType);
 	};
+
+	useEffect(() => {
+		const returnPlayerHomePage = () => {
+			socket.on('left-room', (playerLeft: boolean) => {
+				setIsPlayerJoined(playerLeft); // Maybe use let instead of setting it
+			});
+
+			if (type === 'joinGame' && isPlayerJoined) {
+				navigate('/');
+			}
+		};
+
+		return () => {
+			returnPlayerHomePage();
+		};
+	}, [isPlayerJoined]);
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			{type !== 'joinGame' && !isPlayerJoined ? <DisplayRoomCode codeGenerated={id} /> : ''}
-			{isPlayerJoined ? <DisplayPlayerTurn player={type} playerTurn={isPlayersTurn} isWinner={isWinner} isGameEnded={isGameEnded} /> : ''}
+			{isPlayerJoined ? <DisplayPlayerTurn player={type} playerTurn={isPlayersTurn} isWinner={isWinner} isGameEnded={isGameEnded} roomId={id} /> : ''}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
 				<Board

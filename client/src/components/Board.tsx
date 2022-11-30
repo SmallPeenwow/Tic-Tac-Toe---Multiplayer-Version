@@ -39,7 +39,8 @@ const Board = ({
 
 	// TODO: might need to keep track of X and O on server side to player id in room
 
-	const clicked = async (event: React.MouseEvent<HTMLDivElement>) => {
+	const clicked = (event: React.MouseEvent<HTMLDivElement>) => {
+		event.preventDefault();
 		// Will stop the rest of the code from running when is true
 		if (isGameEnded || isPlayersTurn !== playerCheck) {
 			return;
@@ -49,7 +50,7 @@ const Board = ({
 		let squareValue = parseInt((event.target as HTMLDivElement).dataset.square ?? 'null');
 
 		if (isBoard[squareValue] === '') {
-			let newArray: Array<string> = await updateArray(squareValue, isBoard);
+			let newArray: string[] = updateArray(squareValue, isBoard);
 
 			boardArray.splice(0, isBoard.length, ...newArray);
 
@@ -61,12 +62,13 @@ const Board = ({
 			setIsPlayersTurn(playerCheck === 'startedGame' ? 'joinGame' : 'startedGame');
 		}
 
-		let gameEnd = await checkWinner(boardArray);
+		let gameEnd = checkWinner(boardArray);
 
 		socket.emit('board-function', roomId, boardArray, isTurn, gameEnd, playerCheck, isWinner);
+		// TODO: Maybe send winner name on display winner so making another socket
 	};
 
-	const checkWinner = async (boardArray: Array<string>) => {
+	const checkWinner = (boardArray: Array<string>) => {
 		let lines = [
 			[0, 3, 6],
 			[1, 4, 7],
@@ -108,7 +110,7 @@ const Board = ({
 	};
 
 	// Used to update the board useState
-	const updateArray = async (number: number, board: Array<string>) => {
+	const updateArray = (number: number, board: Array<string>) => {
 		const arrayCopy = [...board];
 		arrayCopy[number] = isTurn;
 
@@ -117,14 +119,14 @@ const Board = ({
 
 	// Renders to many times and win check is behind
 	useEffect(() => {
-		socket.on('board-turn', async (array: string[], turn: string, gameEnded: boolean, playerTurn: string, winner: string) => {
+		socket.on('board-turn', (array: string[], turn: string, gameEnded: boolean, playerTurn: string, winner: string) => {
 			setIsBoard(array);
 			setIsTurn(turn == 'X' ? 'O' : 'X');
 			setIsGameEnded(gameEnded);
 			setIsPlayersTurn(playerTurn);
-			setWinner(winner);
+			//setWinner(winner);
 		});
-	}, [isBoard]);
+	}, [isBoard]); // boardArray : Try this
 
 	return (
 		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={(e) => clicked(e)}>

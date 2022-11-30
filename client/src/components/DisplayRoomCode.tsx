@@ -4,7 +4,7 @@ type DisplayRoomCodeProps = {
 
 const DisplayRoomCode = ({ codeGenerated }: DisplayRoomCodeProps) => {
 	return (
-		<div className='fixed z-10 flex items-center justify-center h-screen w-screen bg-black/95'>
+		<div className='fixed z-10 flex items-center justify-center h-full w-screen bg-black/95'>
 			<div className='fixed flex text-white flex-col items-center justify-center gap-5'>
 				<h2 className='text-3xl mb-3 cursor-default'>Waiting for player to connect...</h2>
 				<p className='cursor-default'>Give your friend the following room id to connect</p>

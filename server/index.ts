@@ -28,7 +28,7 @@ io.on('connection', function (socket: any) {
 
 		let joined = returnPlayerJoined(socket, roomId); // Needs to return false when two players in room
 
-		io.emit('joined', joined);
+		io.to(roomId).emit('joined', joined);
 	});
 
 	// Must either make it the second player leaves when player one leaves
@@ -37,12 +37,23 @@ io.on('connection', function (socket: any) {
 
 		let leftGame = returnPlayerJoined(socket, roomId); // Needs to return true if there is only 1 player in the room
 
-		// This makes all the players leave and the room not exist
-		if (playerType === 'startedGame') {
-			io.in(roomId).socketsLeave(roomId);
-		}
+		// // This makes all the players leave and the room not exist
+		// if (playerType === 'startedGame') {
+		// 	io.in(roomId).socketsLeave(roomId);
+		// }
 
-		io.emit('left-room', leftGame);
+		io.to(roomId).emit('left-room', leftGame);
+	});
+
+	//TODO: Player needs some check as when more people are starting new game screen freaks out
+
+	// socket.on('empty-room', (roomId: string) => {
+	// 	//io.in(roomId).socketsLeave(roomId);
+	// 	io.to(roomId).emit('left-room', false);
+	// });
+
+	socket.on('send-winner', (playerWinner: string, roomId: string) => {
+		io.to(roomId).emit('receive-winner', playerWinner);
 	});
 
 	// Return the X or O value
