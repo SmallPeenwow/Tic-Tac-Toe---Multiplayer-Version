@@ -1,27 +1,25 @@
 import { Link } from 'react-router-dom';
-
 import BackButton from './BackButton';
 
 interface JoinGameProps {
 	roomCode: string;
-	isValid: boolean; // Is for name and roomId
-	isRoomAvailable: boolean; // To check if there are two players in the room already
+	isValid: boolean;
+	isRoomAvailable: boolean;
 	playerName: string;
-	setNameEmpty: (active: boolean) => void;
+	isNameEmpty: boolean;
+	setIsNameEmpty: (active: boolean) => void;
 	setRoomIdEmpty: (active: boolean) => void;
 }
 
-const JoinGameButtons = ({ roomCode, isValid, isRoomAvailable, playerName, setNameEmpty, setRoomIdEmpty }: JoinGameProps) => {
-	let joinGameValidation = isValid === true && isRoomAvailable === true ? true : false;
-
+const JoinGameButtons = ({ roomCode, isValid, isRoomAvailable, playerName, isNameEmpty, setIsNameEmpty, setRoomIdEmpty }: JoinGameProps) => {
 	// TODO: Work on validation for empty room code also
-	const joinRoom = (valid: boolean, roomAvailable: boolean, roomId: string, name: string) => {
-		setNameEmpty(name.length > 0 ? false : true);
-		setRoomIdEmpty(roomId.length > 0 ? false : true);
+	const joinRoom = (isRoomAvailable: boolean, roomId: string, name: string) => {
+		setIsNameEmpty(name.length !== 0 ? true : false);
+		setRoomIdEmpty(roomId.length === 20 ? true : false);
 
-		if (!roomAvailable) {
+		if (!isRoomAvailable) {
 			console.log('The room you trying to access already has two players'); // Will get snackbar later for this
-		} else if (!valid) {
+		} else if (!name) {
 			console.log('name is empty'); // Will be used for snackbar
 		}
 	};
@@ -30,9 +28,9 @@ const JoinGameButtons = ({ roomCode, isValid, isRoomAvailable, playerName, setNa
 		<>
 			<BackButton />
 			<Link
-				to={joinGameValidation ? `/gameArea/${roomCode}/joinGame` : '#'}
+				to={isRoomAvailable && isNameEmpty && isValid ? `/gameArea/${roomCode}/joinGame` : '#'}
 				className='button-style button-color-one w-24'
-				onClick={() => joinRoom(isValid, isRoomAvailable, roomCode, playerName)}
+				onClick={() => joinRoom(isRoomAvailable, roomCode, playerName)}
 			>
 				Let's Go
 			</Link>

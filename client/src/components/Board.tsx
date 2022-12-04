@@ -55,6 +55,7 @@ const Board = ({
 			let newArray: string[] = updateArray(squareValue, isBoard);
 
 			boardArray.splice(0, isBoard.length, ...newArray);
+			console.log(boardArray + ' inside if');
 
 			(event.target as HTMLDivElement).textContent = isTurn;
 
@@ -66,6 +67,7 @@ const Board = ({
 		}
 
 		let gameEnd = checkWinner(boardArray);
+		console.log(boardArray + ' inside if');
 		//const { gameEnd, winnerName } = CheckWinner({ board: isBoard, isTotalMoves });
 
 		console.log(gameEnd + ' game ended');

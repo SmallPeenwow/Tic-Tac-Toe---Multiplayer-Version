@@ -4,62 +4,46 @@ import JoinGameButtons from '../components/JoinGameButtons';
 import { validationCheck } from '../hooks/joinRoomCheck';
 
 const JoinGame = () => {
-	const [isPlayerName, setIsPlayerName] = useState('');
-	const [isRoomCode, setIsRoomCode] = useState('');
+	const [playerName, setPlayerName] = useState('');
+	const [roomCode, setRoomCode] = useState('');
 	const [isValid, setIsValid] = useState(false);
 	const [isRoomAvailable, setIsRoomAvailable] = useState(false);
-	const [isNameEmpty, setNameIsEmpty] = useState(false);
-	const [isRoomIdEmpty, setRoomIdIsEmpty] = useState(false);
+	const [isNameEmpty, setIsNameEmpty] = useState(true);
+	const [isRoomId, setIsRoomId] = useState(true);
 
 	const setName = (event: any) => {
-		setIsPlayerName(event.target.value);
-		setValuesTrue();
+		setPlayerName(event.target.value);
 	};
 
 	const setRoomId = (event: any) => {
-		setIsRoomCode(event.target.value);
-		setValuesTrue();
-	};
-
-	// Probably redo this to be more clean : TODO
-	const setValuesTrue = () => {
-		setNameIsEmpty(false);
-		setRoomIdIsEmpty(false);
+		setRoomCode(event.target.value);
 	};
 
 	useEffect(() => {
-		const load = async () => {
-			// Need to look here to maybe fix
-			socket.emit('check-room', { room: isRoomCode }, (response: boolean) => {
-				setIsRoomAvailable(response);
-			});
+		const { valid } = validationCheck({ name: playerName, roomId: roomCode });
+		setIsValid(valid);
 
-			const { valid } = await validationCheck({ name: isPlayerName, roomId: isRoomCode });
-
-			setIsValid(valid);
-		};
-
-		load().catch((error) => {
-			console.log('fook');
+		socket.emit('check-room', { room: roomCode }, (response: boolean) => {
+			setIsRoomAvailable(response);
 		});
-	}, [isRoomCode, isPlayerName]);
+	}, [roomCode, playerName]);
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			<div className='flex flex-col gap-10'>
 				<input
 					type='text'
-					className={isNameEmpty ? 'input-field input-error' : 'input-field input-correct'}
+					className={isNameEmpty ? 'input-field input-correct' : 'input-field input-error'}
 					placeholder='Enter Name'
 					maxLength={15}
-					value={isPlayerName}
+					value={playerName}
 					onChange={setName}
 				/>
 				<input
 					type='text'
-					className={isRoomIdEmpty ? 'input-field input-error' : 'input-field input-correct'}
+					className={isRoomId ? 'input-field input-correct' : 'input-field input-error'}
 					placeholder='Room ID'
-					value={isRoomCode}
+					value={roomCode}
 					onChange={setRoomId}
 					maxLength={20}
 				/>
@@ -67,10 +51,11 @@ const JoinGame = () => {
 					<JoinGameButtons
 						isValid={isValid}
 						isRoomAvailable={isRoomAvailable}
-						roomCode={isRoomCode}
-						playerName={isPlayerName}
-						setNameEmpty={setNameIsEmpty}
-						setRoomIdEmpty={setRoomIdIsEmpty}
+						isNameEmpty={isNameEmpty}
+						roomCode={roomCode}
+						playerName={playerName}
+						setIsNameEmpty={setIsNameEmpty}
+						setRoomIdEmpty={setIsRoomId}
 					/>
 				</div>
 			</div>
