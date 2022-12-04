@@ -31,6 +31,7 @@ const GameArea = () => {
 
 	socket.on('joined', (players: boolean) => {
 		setIsPlayerJoined(players);
+		console.log('peen');
 	});
 
 	const leaveGame = (roomId: string | undefined, playerType: string | undefined) => {
@@ -55,8 +56,8 @@ const GameArea = () => {
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
-			{type !== 'joinGame' && !isPlayerJoined ? <DisplayRoomCode codeGenerated={id} /> : ''}
-			{isPlayerJoined ? <DisplayPlayerTurn player={type} playerTurn={isPlayersTurn} isWinner={isWinner} isGameEnded={isGameEnded} roomId={id} /> : ''}
+			{type !== 'joinGame' && !isPlayerJoined && <DisplayRoomCode codeGenerated={id} />}
+			{isPlayerJoined && <DisplayPlayerTurn player={type} playerTurn={isPlayersTurn} isWinner={isWinner} isGameEnded={isGameEnded} roomId={id} />}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
 				<Board

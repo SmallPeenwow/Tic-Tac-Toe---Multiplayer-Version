@@ -59,10 +59,10 @@ io.on('connection', function (socket: any) {
 	// Return the X or O value
 	socket.on(
 		'board-function',
-		(room: string, boardArray: Array<string>[], isTurn: string, gameEnded: boolean, playerCheck: string, isWinner: string) => {
+		(room: string, boardArray: Array<string>[], isTurn: string, gameEnded: boolean, playerCheck: string, winner: string) => {
 			playerCheck = playerCheck === 'startedGame' ? 'joinGame' : 'startedGame';
 
-			socket.to(room).emit('board-turn', boardArray, isTurn, gameEnded, playerCheck, isWinner);
+			socket.to(room).emit('board-turn', boardArray, isTurn, gameEnded, playerCheck, winner);
 		}
 	);
 

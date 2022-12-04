@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { socket } from '../App';
+import { CheckWinner } from '../hooks/CheckWinner';
 
 type BoardProps = {
 	roomId: string | undefined;
@@ -35,6 +36,7 @@ const Board = ({
 	setIsTotalMoves,
 }: BoardProps) => {
 	// This this the variable used to check to see which player one and using the useState to keep the data
+
 	const boardArray: string[] = isBoard;
 
 	// TODO: might need to keep track of X and O on server side to player id in room
@@ -60,16 +62,23 @@ const Board = ({
 
 			setIsTotalMoves(isTotalMoves + 1);
 			setIsPlayersTurn(playerCheck === 'startedGame' ? 'joinGame' : 'startedGame');
+			//setIsBoard(boardArray);
 		}
 
 		let gameEnd = checkWinner(boardArray);
+		//const { gameEnd, winnerName } = CheckWinner({ board: isBoard, isTotalMoves });
 
+		console.log(gameEnd + ' game ended');
+		//setWinner(checkWinnerValues.winnerName);
+		//setIsGameEnded(checkWinnerValues.gameEnd);
+		//console.log(winnerName + ' winner');
 		socket.emit('board-function', roomId, boardArray, isTurn, gameEnd, playerCheck, isWinner);
 		// TODO: Maybe send winner name on display winner so making another socket
 	};
 
+	// Game Isn't ending at right time
 	const checkWinner = (boardArray: Array<string>) => {
-		let lines = [
+		const lines = [
 			[0, 3, 6],
 			[1, 4, 7],
 			[2, 5, 8],
@@ -80,13 +89,14 @@ const Board = ({
 			[6, 7, 8],
 		];
 
-		let board = boardArray;
+		//let board = boardArray;
 		let result;
 		let gameEnd = false;
 
+		// SOMETHING not right here at all
 		for (let i = 0; i < lines.length; i++) {
-			if (board[lines[i][0]] == board[lines[i][1]] && board[lines[i][1]] == board[lines[i][2]]) {
-				result = board[lines[i][0]];
+			if (boardArray[lines[i][0]] == boardArray[lines[i][1]] && boardArray[lines[i][1]] == boardArray[lines[i][2]]) {
+				result = boardArray[lines[i][0]];
 			}
 		}
 
@@ -96,13 +106,17 @@ const Board = ({
 
 		gameEnd = result === 'X' || result === 'O' || result === 'draw' ? true : false;
 
+		//let winnerName: string | undefined = '';
 		// need to make this less
 		if (result == 'X') {
 			setWinner('startedGame');
+			// winnerName = 'startedGame';
 		} else if (result == 'O') {
 			setWinner('joinGame');
+			// winnerName = 'joinGame';
 		} else if (result == 'draw') {
 			setWinner('Draw');
+			//winnerName = 'Draw';
 		}
 
 		setIsGameEnded(gameEnd);
@@ -117,19 +131,37 @@ const Board = ({
 		return arrayCopy;
 	};
 
-	// Renders to many times and win check is behind
-	useEffect(() => {
+	// Now this is running more than once// DON'T know what to do anymore...
+	const sendChanges = () => {
 		socket.on('board-turn', (array: string[], turn: string, gameEnded: boolean, playerTurn: string, winner: string) => {
 			setIsBoard(array);
 			setIsTurn(turn == 'X' ? 'O' : 'X');
 			setIsGameEnded(gameEnded);
 			setIsPlayersTurn(playerTurn);
-			//setWinner(winner);
+			setWinner(winner);
+			console.log(winner + ' sending');
 		});
+
+		//checkWinner(boardArray);
+	};
+
+	// Renders to many times and win check is behind
+	useEffect(() => {
+		sendChanges();
+		// socket.on('board-turn', (array: string[], turn: string, gameEnded: boolean, playerTurn: string) => {
+		// 	setIsBoard(array);
+		// 	setIsTurn(turn == 'X' ? 'O' : 'X');
+		// 	setIsGameEnded(gameEnded);
+		// 	setIsPlayersTurn(playerTurn);
+		// 	// setWinner(winner);
+		// });
+		return () => {
+			sendChanges();
+		};
 	}, [isBoard]); // boardArray : Try this
 
 	return (
-		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={(e) => clicked(e)}>
+		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={clicked}>
 			<div className='square border-r-2 border-b-2' data-square='0'>
 				{boardArray[0]}
 			</div>

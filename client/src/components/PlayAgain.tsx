@@ -1,5 +1,3 @@
-import React from 'react';
-
 type PlayAgainProps = {
 	isGameEnded: boolean;
 	setIsWinner: (active: string) => void;
@@ -12,6 +10,7 @@ type PlayAgainProps = {
 
 //TODO: Send this to player side also
 // TODO: Don't think player X is working and should look at giving own turns
+// TODO: Maybe make this a function in GameArea for when other player leaves so board is clear and values reset
 const PlayAgain = ({ isGameEnded, setIsWinner, setIsTurn, setIsPlayersTurn, setIsGameEnded, setIsBoard, setIsTotalMoves }: PlayAgainProps) => {
 	const restartGame = () => {
 		setIsWinner('');

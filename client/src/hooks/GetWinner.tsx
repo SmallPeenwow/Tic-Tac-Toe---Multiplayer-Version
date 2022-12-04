@@ -4,10 +4,9 @@ type WinnerProps = {
 };
 
 //TODO: This not working also
+// This is running multiple times when player clicks on div
 export function GetWinner({ player, isWinner }: WinnerProps) {
 	let winner: string | undefined;
-	console.log(player);
-	console.log(isWinner);
 
 	if (isWinner === 'joinGame' && player === 'startedGame') {
 		winner = 'Player 2 Wins';

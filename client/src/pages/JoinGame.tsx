@@ -29,6 +29,7 @@ const JoinGame = () => {
 
 	useEffect(() => {
 		const load = async () => {
+			// Need to look here to maybe fix
 			socket.emit('check-room', { room: isRoomCode }, (response: boolean) => {
 				setIsRoomAvailable(response);
 			});
