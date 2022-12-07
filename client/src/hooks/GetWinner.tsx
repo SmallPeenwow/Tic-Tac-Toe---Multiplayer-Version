@@ -6,17 +6,17 @@ type WinnerProps = {
 //TODO: This not working also
 // This is running multiple times when player clicks on div
 export function GetWinner({ player, isWinner }: WinnerProps) {
-	let winner: string | undefined;
+	let won: string | undefined;
 
-	if (isWinner === 'joinGame' && player === 'startedGame') {
-		winner = 'Player 2 Wins';
-	} else if (isWinner === 'startedGame' && player === 'joinGame') {
-		winner = 'Player 1 Wins';
+	if (isWinner === 'joinGame' && player === 'host') {
+		won = 'Player 2 Wins';
+	} else if (isWinner === 'host' && player === 'joinGame') {
+		won = 'Player 1 Wins';
 	} else if (isWinner === 'Draw') {
-		winner = 'Draw';
+		won = 'Draw';
 	} else {
-		winner = 'You Win';
+		won = 'You Win';
 	}
 
-	return { winner };
+	return { won };
 }

@@ -12,15 +12,16 @@ interface JoinGameProps {
 }
 
 const JoinGameButtons = ({ roomCode, isValid, isRoomAvailable, playerName, isNameEmpty, setIsNameEmpty, setRoomIdEmpty }: JoinGameProps) => {
-	// TODO: Work on validation for empty room code also
 	const joinRoom = (isRoomAvailable: boolean, roomId: string, name: string) => {
 		setIsNameEmpty(name.length !== 0 ? true : false);
 		setRoomIdEmpty(roomId.length === 20 ? true : false);
 
 		if (!isRoomAvailable) {
-			console.log('The room you trying to access already has two players'); // Will get snackbar later for this
+			alert('The room you trying to access already has two players.');
 		} else if (!name) {
-			console.log('name is empty'); // Will be used for snackbar
+			alert('Name is empty.');
+		} else if (!roomId) {
+			alert('Room Code has not been entered.');
 		}
 	};
 

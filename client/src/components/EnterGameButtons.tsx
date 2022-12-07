@@ -18,7 +18,7 @@ const EnterGameButtons = ({ playerName, setIsNameEntered }: PlayerNameProp) => {
 		<>
 			<BackButton />
 			<Link
-				to={playerName.length !== 0 ? `/gameArea/${codeGenerated}/startedGame` : '#'}
+				to={playerName.length !== 0 ? `/gameArea/${codeGenerated}/host` : '#'}
 				className='button-style button-color-one w-24'
 				onClick={() => checkNameValue(playerName)}
 			>

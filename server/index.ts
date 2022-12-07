@@ -42,7 +42,7 @@ io.on('connection', function (socket: any) {
 		// 	io.in(roomId).socketsLeave(roomId);
 		// }
 
-		io.to(roomId).emit('left-room', leftGame);
+		io.to(roomId).emit('left-room', leftGame, playerType);
 	});
 
 	//TODO: Player needs some check as when more people are starting new game screen freaks out
@@ -60,7 +60,7 @@ io.on('connection', function (socket: any) {
 	socket.on(
 		'board-function',
 		(room: string, boardArray: Array<string>[], isTurn: string, gameEnded: boolean, playerCheck: string, winner: string) => {
-			playerCheck = playerCheck === 'startedGame' ? 'joinGame' : 'startedGame';
+			playerCheck = playerCheck === 'host' ? 'joinGame' : 'host';
 
 			socket.to(room).emit('board-turn', boardArray, isTurn, gameEnded, playerCheck, winner);
 		}

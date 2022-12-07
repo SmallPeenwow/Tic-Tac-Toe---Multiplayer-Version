@@ -1,10 +1,10 @@
 type CheckWinnerProps = {
 	board: string[];
-	isTotalMoves: number;
+	totalMoves: number;
 };
 // Not working
 
-export const CheckWinner = ({ board, isTotalMoves }: CheckWinnerProps) => {
+export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 	const lines = [
 		[0, 3, 6],
 		[1, 4, 7],
@@ -28,7 +28,7 @@ export const CheckWinner = ({ board, isTotalMoves }: CheckWinnerProps) => {
 		}
 	}
 
-	if (isTotalMoves == 9) {
+	if (totalMoves == 9) {
 		result = 'draw';
 	}
 
@@ -36,7 +36,7 @@ export const CheckWinner = ({ board, isTotalMoves }: CheckWinnerProps) => {
 
 	// need to make this less
 	if (result == 'X') {
-		winnerName = 'startedGame';
+		winnerName = 'host';
 	} else if (result == 'O') {
 		winnerName = 'joinGame';
 	} else if (result == 'draw') {

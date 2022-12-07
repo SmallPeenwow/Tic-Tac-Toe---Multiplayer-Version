@@ -15,66 +15,96 @@ import PlayAgain from '../components/PlayAgain';
 // TODO: fix socket issues with leaving room and checking room users
 // TODO: For host when other player leaves must default values
 
+export type GamePlay = {
+	theWinner: string;
+	boardTurn: string;
+	isGameEnded: boolean;
+	playersTurn: string;
+	board: string[];
+	totalMoves: number;
+};
+
+enum Player {
+	winner = '',
+	host = 'host',
+}
+
+enum BoardValue {
+	value = 'X',
+}
+
 const GameArea = () => {
 	const { id, type } = useParams();
+	const [gamePlay, setGamePlay] = useState<GamePlay>({
+		theWinner: Player.winner,
+		boardTurn: BoardValue.value,
+		isGameEnded: false,
+		playersTurn: Player.host,
+		board: Array(9).fill(''),
+		totalMoves: 1,
+	});
 	const [isPlayerJoined, setIsPlayerJoined] = useState(false); // TODO: check how value is used
-	const [isTrackScore, setIsTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
-	const [isWinner, setIsWinner] = useState('');
-	const [isTurn, setIsTurn] = useState('X');
-	const [isGameEnded, setIsGameEnded] = useState(false);
-	const [isPlayersTurn, setIsPlayersTurn] = useState('startedGame');
-	const [isBoard, setIsBoard] = useState(Array(9).fill(''));
-	const [isTotalMoves, setIsTotalMoves] = useState(1);
+	const [trackScore, setTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
+	// const [theWinner, setTheWinner] = useState('');
+	// const [boardValue, setBoardValue] = useState('X');
+	// const [isGameEnded, setIsGameEnded] = useState(false);
+	// const [playersTurn, setPlayersTurn] = useState('host');
+	// const [board, setBoard] = useState(Array(9).fill(''));
+	// const [totalMoves, setTotalMoves] = useState(1);
 	const navigate = useNavigate();
 
+	console.log(typeof gamePlay + ' type');
+
 	socket.emit('join-room', id);
+
+	const leaveGame = (roomId: string | undefined, playerType: string | undefined) => {
+		socket.emit('leave-room', roomId, playerType);
+	};
 
 	socket.on('joined', (players: boolean) => {
 		setIsPlayerJoined(players);
 		console.log('peen');
 	});
 
-	const leaveGame = (roomId: string | undefined, playerType: string | undefined) => {
-		socket.emit('leave-room', roomId, playerType);
-	};
-
 	useEffect(() => {
-		const returnPlayerHomePage = () => {
-			socket.on('left-room', (playerLeft: boolean) => {
-				setIsPlayerJoined(playerLeft); // Maybe use let instead of setting it
-			});
-
-			if (type === 'joinGame' && isPlayerJoined) {
+		// const joinedGame = () => {};
+		socket.on('left-room', (playerLeft: boolean, player: string) => {
+			setIsPlayerJoined(playerLeft);
+			if (player === 'host') {
 				navigate('/');
 			}
-		};
+		});
 
-		return () => {
-			returnPlayerHomePage();
-		};
+		// return () => {
+		// 	joinedGame();
+		// };
 	}, [isPlayerJoined]);
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			{type !== 'joinGame' && !isPlayerJoined && <DisplayRoomCode codeGenerated={id} />}
-			{isPlayerJoined && <DisplayPlayerTurn player={type} playerTurn={isPlayersTurn} isWinner={isWinner} isGameEnded={isGameEnded} roomId={id} />}
+			{isPlayerJoined && (
+				<DisplayPlayerTurn player={type} winner={gamePlay.theWinner} isGameEnded={gamePlay.isGameEnded} playerTurn={gamePlay.playersTurn} />
+			)}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
 				<Board
 					roomId={id}
-					playerCheck={type}
-					isWinner={isWinner}
-					isTurn={isTurn}
-					isPlayersTurn={isPlayersTurn}
-					isGameEnded={isGameEnded}
-					isBoard={isBoard}
-					isTotalMoves={isTotalMoves}
-					setWinner={setIsWinner}
-					setIsTurn={setIsTurn}
-					setIsPlayersTurn={setIsPlayersTurn}
-					setIsGameEnded={setIsGameEnded}
-					setIsBoard={setIsBoard}
-					setIsTotalMoves={setIsTotalMoves}
+					playerCheckType={type}
+					// winner={gamePlay.theWinner}
+					// turn={gamePlay.boardTurn}
+					// playersTurn={gamePlay.playersTurn}
+					// isGameEnded={gamePlay.isGameEnded}
+					// board={gamePlay.board}
+					// totalMoves={gamePlay.totalMoves}
+					gamePlay={gamePlay}
+					setGamePlay={setGamePlay}
+					// setWinner={setTheWinner}
+					// setIsTurn={setBoardValue}
+					// setIsPlayersTurn={setPlayersTurn}
+					// setIsGameEnded={setIsGameEnded}
+					// setIsBoard={setBoard}
+					// setIsTotalMoves={setTotalMoves}
 				/>
 				<h2 className='border-b-2 border-b-white w-72 text-2xl'>Score Board</h2>
 				<div className='flex justify-center text-xl w-72'>
@@ -85,7 +115,7 @@ const GameArea = () => {
 					</div>
 					<div className='border-l-2 border-l-white basis-0.5 '></div>
 					<div className='flex capitalize flex-col p-2 px-4 basis-32 overflow-hidden'>
-						<p>{type === 'startedGame' ? 'Player 2' : 'Player 1'}</p>
+						<p>{type === 'host' ? 'Player 2' : 'Player 1'}</p>
 						<p>0</p>
 					</div>
 				</div>
@@ -94,13 +124,15 @@ const GameArea = () => {
 				</Link>
 			</div>
 			<PlayAgain
-				isGameEnded={isGameEnded}
-				setIsWinner={setIsWinner}
-				setIsTurn={setIsTurn}
-				setIsGameEnded={setIsGameEnded}
-				setIsPlayersTurn={setIsPlayersTurn}
-				setIsBoard={setIsBoard}
-				setIsTotalMoves={setIsTotalMoves}
+				isGameEnded={gamePlay.isGameEnded}
+				gamePlay={gamePlay}
+				setGamePlay={setGamePlay}
+				// setIsWinner={setTheWinner}
+				// setIsTurn={setBoardValue}
+				// setIsGameEnded={setIsGameEnded}
+				// setIsPlayersTurn={setPlayersTurn}
+				// setIsBoard={setBoard}
+				// setIsTotalMoves={setTotalMoves}
 			/>
 		</div>
 	);
