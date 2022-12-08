@@ -1,20 +1,19 @@
 import { GetWinner } from '../hooks/GetWinner';
+import { GamePlay } from '../pages/GameArea';
 
 type PlayerProp = {
 	player: string | undefined;
-	playerTurn: string;
-	winner: string | undefined;
-	isGameEnded: boolean;
+	gamePlay: GamePlay;
 };
 
 // TODO: Looping multiple times here
-const DisplayPlayerTurn = ({ player, playerTurn, winner, isGameEnded }: PlayerProp) => {
-	const { won } = GetWinner({ player, isWinner: winner });
+const DisplayPlayerTurn = ({ player, gamePlay }: PlayerProp) => {
+	const { won } = GetWinner({ player, isWinner: gamePlay.theWinner });
 
 	return (
 		<>
-			{!isGameEnded ? (
-				<div className='display-turn-once'>{player === playerTurn ? 'Your' : `Player ${player === 'host' ? "2's" : "1's"}`} Turn</div>
+			{!gamePlay.isGameEnded ? (
+				<div className='display-turn-once'>{player === gamePlay.playersTurn ? 'Your' : `Player ${player === 'host' ? "2's" : "1's"}`} Turn</div>
 			) : (
 				<div className='display-turn-once'>{won}</div>
 			)}

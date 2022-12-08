@@ -6,8 +6,6 @@ const io = require('socket.io')(http, {
 	},
 });
 
-// Can store one games on server side and increase by one depending on if startedGame or joinGame won
-
 app.get('/', function (req: any, res: any) {
 	res.send('Howdy!');
 });
@@ -31,32 +29,21 @@ io.on('connection', function (socket: any) {
 		io.to(roomId).emit('joined', joined);
 	});
 
-	// Must either make it the second player leaves when player one leaves
 	socket.on('leave-room', (roomId: string, playerType: string) => {
 		socket.leave(roomId);
 
-		let leftGame = returnPlayerJoined(socket, roomId); // Needs to return true if there is only 1 player in the room
-
-		// // This makes all the players leave and the room not exist
-		// if (playerType === 'startedGame') {
-		// 	io.in(roomId).socketsLeave(roomId);
-		// }
+		// Needs to return true if there is only 1 player in the room
+		let leftGame = returnPlayerJoined(socket, roomId);
 
 		io.to(roomId).emit('left-room', leftGame, playerType);
 	});
 
 	//TODO: Player needs some check as when more people are starting new game screen freaks out
 
-	// socket.on('empty-room', (roomId: string) => {
-	// 	//io.in(roomId).socketsLeave(roomId);
-	// 	io.to(roomId).emit('left-room', false);
-	// });
-
 	socket.on('send-winner', (playerWinner: string, roomId: string) => {
 		io.to(roomId).emit('receive-winner', playerWinner);
 	});
 
-	// Return the X or O value
 	socket.on(
 		'board-function',
 		(room: string, boardArray: Array<string>[], isTurn: string, gameEnded: boolean, playerCheck: string, winner: string) => {

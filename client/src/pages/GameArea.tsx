@@ -45,17 +45,13 @@ const GameArea = () => {
 	});
 	const [isPlayerJoined, setIsPlayerJoined] = useState(false); // TODO: check how value is used
 	const [trackScore, setTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
-	// const [theWinner, setTheWinner] = useState('');
-	// const [boardValue, setBoardValue] = useState('X');
-	// const [isGameEnded, setIsGameEnded] = useState(false);
-	// const [playersTurn, setPlayersTurn] = useState('host');
-	// const [board, setBoard] = useState(Array(9).fill(''));
-	// const [totalMoves, setTotalMoves] = useState(1);
 	const navigate = useNavigate();
 
-	console.log(typeof gamePlay + ' type');
+	// Stuff here being run multiple times
 
-	socket.emit('join-room', id);
+	if (!isPlayerJoined) {
+		socket.emit('join-room', id);
+	}
 
 	const leaveGame = (roomId: string | undefined, playerType: string | undefined) => {
 		socket.emit('leave-room', roomId, playerType);
@@ -66,46 +62,33 @@ const GameArea = () => {
 		console.log('peen');
 	});
 
+	// End of stuff multiple times
+
+	const LeftRoomCheck = (playerLeft: boolean, player: string) => {
+		setIsPlayerJoined(playerLeft);
+		if (player === 'host') {
+			navigate('/');
+		}
+	};
+
+	// Need clean up function
 	useEffect(() => {
-		// const joinedGame = () => {};
 		socket.on('left-room', (playerLeft: boolean, player: string) => {
-			setIsPlayerJoined(playerLeft);
-			if (player === 'host') {
-				navigate('/');
-			}
+			LeftRoomCheck(playerLeft, player);
 		});
 
-		// return () => {
-		// 	joinedGame();
-		// };
+		return () => {
+			LeftRoomCheck;
+		};
 	}, [isPlayerJoined]);
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
 			{type !== 'joinGame' && !isPlayerJoined && <DisplayRoomCode codeGenerated={id} />}
-			{isPlayerJoined && (
-				<DisplayPlayerTurn player={type} winner={gamePlay.theWinner} isGameEnded={gamePlay.isGameEnded} playerTurn={gamePlay.playersTurn} />
-			)}
+			{isPlayerJoined && <DisplayPlayerTurn player={type} gamePlay={gamePlay} />}
 			<div className='flex flex-col justify-center items-center h-full w-full'>
 				<h1 className='text-5xl'></h1>
-				<Board
-					roomId={id}
-					playerCheckType={type}
-					// winner={gamePlay.theWinner}
-					// turn={gamePlay.boardTurn}
-					// playersTurn={gamePlay.playersTurn}
-					// isGameEnded={gamePlay.isGameEnded}
-					// board={gamePlay.board}
-					// totalMoves={gamePlay.totalMoves}
-					gamePlay={gamePlay}
-					setGamePlay={setGamePlay}
-					// setWinner={setTheWinner}
-					// setIsTurn={setBoardValue}
-					// setIsPlayersTurn={setPlayersTurn}
-					// setIsGameEnded={setIsGameEnded}
-					// setIsBoard={setBoard}
-					// setIsTotalMoves={setTotalMoves}
-				/>
+				<Board roomId={id} playerCheckType={type} gamePlay={gamePlay} setGamePlay={setGamePlay} />
 				<h2 className='border-b-2 border-b-white w-72 text-2xl'>Score Board</h2>
 				<div className='flex justify-center text-xl w-72'>
 					<div className='flex capitalize flex-col p-2 px-4 basis-32 overflow-hidden'>
@@ -123,17 +106,7 @@ const GameArea = () => {
 					Rage Quit
 				</Link>
 			</div>
-			<PlayAgain
-				isGameEnded={gamePlay.isGameEnded}
-				gamePlay={gamePlay}
-				setGamePlay={setGamePlay}
-				// setIsWinner={setTheWinner}
-				// setIsTurn={setBoardValue}
-				// setIsGameEnded={setIsGameEnded}
-				// setIsPlayersTurn={setPlayersTurn}
-				// setIsBoard={setBoard}
-				// setIsTotalMoves={setTotalMoves}
-			/>
+			<PlayAgain isGameEnded={gamePlay.isGameEnded} gamePlay={gamePlay} setGamePlay={setGamePlay} />
 		</div>
 	);
 };

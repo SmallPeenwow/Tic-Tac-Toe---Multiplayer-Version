@@ -21,9 +21,9 @@ export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 	let result;
 	let gameEnd = false;
 
-	// SOMETHING not right here at all
+	//result = await GetResult(lines, board);
 	for (let i = 0; i < lines.length; i++) {
-		if (board[lines[i][0]] == board[lines[i][1]] && board[lines[i][1]] == board[lines[i][2]]) {
+		if (board[lines[i][0]] === board[lines[i][1]] && board[lines[i][1]] === board[lines[i][2]]) {
 			result = board[lines[i][0]];
 		}
 	}
@@ -34,7 +34,8 @@ export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 
 	gameEnd = result === 'X' || result === 'O' || result === 'draw' ? true : false;
 
-	// need to make this less
+	console.log(result + ' result');
+	//winnerName = await CheckResult(result);
 	if (result == 'X') {
 		winnerName = 'host';
 	} else if (result == 'O') {
@@ -43,6 +44,29 @@ export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 		winnerName = 'Draw';
 	}
 
+	console.log(winnerName + ' winner');
+	console.log(gameEnd + ' game end');
+
 	//setIsGameEnded(gameEnd);
 	return { gameEnd, winnerName };
+};
+
+const GetResult = async (lines: number[][], board: string[]) => {
+	for (let i = 0; i < lines.length; i++) {
+		if (board[lines[i][0]] === board[lines[i][1]] && board[lines[i][1]] === board[lines[i][2]]) {
+			return board[lines[i][0]];
+		}
+	}
+};
+
+const CheckResult = async (result: string | undefined) => {
+	if (result == 'X') {
+		return 'host';
+	} else if (result == 'O') {
+		return 'joinGame';
+	} else if (result == 'draw') {
+		return 'Draw';
+	} else {
+		return '';
+	}
 };
