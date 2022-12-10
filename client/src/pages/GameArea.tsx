@@ -47,22 +47,18 @@ const GameArea = () => {
 	const [trackScore, setTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
 	const navigate = useNavigate();
 
-	// Stuff here being run multiple times
-
 	if (!isPlayerJoined) {
 		socket.emit('join-room', id);
+
+		socket.on('joined', (players: boolean) => {
+			setIsPlayerJoined(players);
+			console.log('peen');
+		});
 	}
 
 	const leaveGame = (roomId: string | undefined, playerType: string | undefined) => {
 		socket.emit('leave-room', roomId, playerType);
 	};
-
-	socket.on('joined', (players: boolean) => {
-		setIsPlayerJoined(players);
-		console.log('peen');
-	});
-
-	// End of stuff multiple times
 
 	const LeftRoomCheck = (playerLeft: boolean, player: string) => {
 		setIsPlayerJoined(playerLeft);

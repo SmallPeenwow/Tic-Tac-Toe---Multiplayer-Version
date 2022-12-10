@@ -17,11 +17,7 @@ const Board = ({
 	gamePlay,
 	setGamePlay,
 }: BoardProps) => {
-	// This this the variable used to check to see which player one and using the useState to keep the data
-
 	const boardArray: string[] = gamePlay.board;
-
-	// TODO: might need to keep track of X and O on server side to player id in room
 
 	const clicked = (event: React.MouseEvent<HTMLDivElement>) => {
 		event.preventDefault();
@@ -41,13 +37,6 @@ const Board = ({
 
 			(event.target as HTMLDivElement).textContent = gamePlay.boardTurn;
 
-			// setIsTurn(isTurn == 'X' ? 'O' : 'X');
-
-			// setIsTotalMoves(isTotalMoves + 1);
-			// setIsPlayersTurn(playerCheck === 'host' ? 'joinGame' : 'host');
-			//setIsBoard(boardArray);
-			//let gameEnd = checkWinner(boardArray);
-
 			const { gameEnd, winnerName } = CheckWinner({ board: gamePlay.board, totalMoves: gamePlay.totalMoves });
 
 			setGamePlay({
@@ -55,16 +44,12 @@ const Board = ({
 				isGameEnded: gameEnd,
 				theWinner: winnerName,
 				boardTurn: gamePlay.boardTurn == 'X' ? 'O' : 'X',
-				totalMoves: +1,
+				totalMoves: gamePlay.totalMoves + 1,
 				playersTurn: playerCheckType === 'host' ? 'joinGame' : 'host',
 			});
 			console.log(JSON.stringify(gamePlay) + ' game');
-			//setWinner(checkWinnerValues.winnerName);
-			//setIsGameEnded(checkWinnerValues.gameEnd);
-			//console.log(winnerName + ' winner');
-			// TODO: Instead of playerCheckType it should be player turn from gamePlay but will have to check in the server side also
+
 			socket.emit('board-function', roomId, boardArray, gamePlay.boardTurn, gameEnd, playerCheckType, winnerName);
-			// TODO: Maybe send winner name on display winner so making another socket
 		}
 	};
 
@@ -76,7 +61,7 @@ const Board = ({
 		return arrayCopy;
 	};
 
-	// Now this is running more than once// DON'T know what to do anymore...
+	// This keeps increasing when ran
 	const sendChanges = () => {
 		socket.on('board-turn', (array: string[], turn: string, gameEnded: boolean, playerTurn: string, winner: string) => {
 			setGamePlay({
@@ -98,7 +83,7 @@ const Board = ({
 		return () => {
 			sendChanges();
 		};
-	}, [gamePlay]); // boardArray : Try this
+	}, [gamePlay.board]);
 
 	return (
 		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={clicked}>

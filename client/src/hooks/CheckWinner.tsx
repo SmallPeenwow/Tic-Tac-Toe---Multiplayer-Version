@@ -2,7 +2,6 @@ type CheckWinnerProps = {
 	board: string[];
 	totalMoves: number;
 };
-// Not working
 
 export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 	const lines = [
@@ -16,15 +15,13 @@ export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 		[6, 7, 8],
 	];
 
-	//let board = boardArray;
 	let winnerName: string = '';
 	let result;
 	let gameEnd = false;
 
-	//result = await GetResult(lines, board);
 	for (let i = 0; i < lines.length; i++) {
-		if (board[lines[i][0]] === board[lines[i][1]] && board[lines[i][1]] === board[lines[i][2]]) {
-			result = board[lines[i][0]];
+		if (winnerName === '') {
+			result = InnerLoop(lines[0], board);
 		}
 	}
 
@@ -34,8 +31,6 @@ export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 
 	gameEnd = result === 'X' || result === 'O' || result === 'draw' ? true : false;
 
-	console.log(result + ' result');
-	//winnerName = await CheckResult(result);
 	if (result == 'X') {
 		winnerName = 'host';
 	} else if (result == 'O') {
@@ -44,29 +39,9 @@ export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 		winnerName = 'Draw';
 	}
 
-	console.log(winnerName + ' winner');
-	console.log(gameEnd + ' game end');
-
-	//setIsGameEnded(gameEnd);
 	return { gameEnd, winnerName };
 };
 
-const GetResult = async (lines: number[][], board: string[]) => {
-	for (let i = 0; i < lines.length; i++) {
-		if (board[lines[i][0]] === board[lines[i][1]] && board[lines[i][1]] === board[lines[i][2]]) {
-			return board[lines[i][0]];
-		}
-	}
-};
-
-const CheckResult = async (result: string | undefined) => {
-	if (result == 'X') {
-		return 'host';
-	} else if (result == 'O') {
-		return 'joinGame';
-	} else if (result == 'draw') {
-		return 'Draw';
-	} else {
-		return '';
-	}
+const InnerLoop = (lines: number[], board: string[]) => {
+	if (board[lines[0]] === board[lines[1]] && board[lines[1]] === board[lines[2]]) return board[lines[0]];
 };
