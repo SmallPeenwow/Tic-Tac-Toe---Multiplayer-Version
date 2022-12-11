@@ -33,7 +33,6 @@ const Board = ({
 			let newArray: string[] = updateArray(squareValue, gamePlay.board, gamePlay.boardTurn);
 
 			boardArray.splice(0, gamePlay.board.length, ...newArray);
-			console.log(boardArray + ' inside if');
 
 			(event.target as HTMLDivElement).textContent = gamePlay.boardTurn;
 
@@ -44,11 +43,10 @@ const Board = ({
 				isGameEnded: gameEnd,
 				theWinner: winnerName,
 				boardTurn: gamePlay.boardTurn == 'X' ? 'O' : 'X',
-				totalMoves: gamePlay.totalMoves + 1,
+				totalMoves: gamePlay.totalMoves++,
 				playersTurn: playerCheckType === 'host' ? 'joinGame' : 'host',
 			});
 			console.log(JSON.stringify(gamePlay) + ' game');
-
 			socket.emit('board-function', roomId, boardArray, gamePlay.boardTurn, gameEnd, playerCheckType, winnerName);
 		}
 	};
@@ -70,6 +68,7 @@ const Board = ({
 				boardTurn: turn == 'X' ? 'O' : 'X',
 				isGameEnded: gameEnded,
 				playersTurn: playerTurn,
+				totalMoves: gamePlay.totalMoves++,
 				theWinner: winner,
 			});
 			console.log(winner + ' sending');

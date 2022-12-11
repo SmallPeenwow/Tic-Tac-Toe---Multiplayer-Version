@@ -43,7 +43,7 @@ const GameArea = () => {
 		board: Array(9).fill(''),
 		totalMoves: 1,
 	});
-	const [isPlayerJoined, setIsPlayerJoined] = useState(false); // TODO: check how value is used
+	const [isPlayerJoined, setIsPlayerJoined] = useState(false);
 	const [trackScore, setTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
 	const navigate = useNavigate();
 
@@ -62,8 +62,10 @@ const GameArea = () => {
 
 	const LeftRoomCheck = (playerLeft: boolean, player: string) => {
 		setIsPlayerJoined(playerLeft);
+		console.log('run when player leaves check 2');
 		if (player === 'host') {
 			navigate('/');
+			console.log('run when player leaves');
 		}
 	};
 
@@ -98,11 +100,11 @@ const GameArea = () => {
 						<p>0</p>
 					</div>
 				</div>
-				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28' onClick={() => leaveGame(id, type)}>
+				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28 z-30' onClick={() => leaveGame(id, type)}>
 					Rage Quit
 				</Link>
 			</div>
-			<PlayAgain isGameEnded={gamePlay.isGameEnded} gamePlay={gamePlay} setGamePlay={setGamePlay} />
+			<PlayAgain isPlayerJoined={isPlayerJoined} gamePlay={gamePlay} setGamePlay={setGamePlay} roomId={id} />
 		</div>
 	);
 };

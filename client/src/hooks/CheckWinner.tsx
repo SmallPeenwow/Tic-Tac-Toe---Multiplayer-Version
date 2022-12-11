@@ -20,8 +20,8 @@ export const CheckWinner = ({ board, totalMoves }: CheckWinnerProps) => {
 	let gameEnd = false;
 
 	for (let i = 0; i < lines.length; i++) {
-		if (winnerName === '') {
-			result = InnerLoop(lines[0], board);
+		if (result === undefined) {
+			result = InnerLoop(lines[i], board);
 		}
 	}
 
