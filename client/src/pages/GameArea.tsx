@@ -8,8 +8,6 @@ import PlayAgain from '../components/PlayAgain';
 
 // Add onclick for socket.io functions to make the rooms disconnect
 
-// Must make check to see who started and joined game
-// will do a check on server side to see if player join to get rid of DisplayRoomCode
 // TODO: leave-room socket doesn't work without an error of memory leak
 // TODO: Make text on left empty until player joins
 // TODO: fix socket issues with leaving room and checking room users
@@ -44,7 +42,7 @@ const GameArea = () => {
 		totalMoves: 1,
 	});
 	const [isPlayerJoined, setIsPlayerJoined] = useState(false);
-	const [trackScore, setTrackScore] = useState(0); // Will be used for each different player might need to make an array or object on server side to keep track with the player id with score if rematch
+	const [trackScore, setTrackScore] = useState(0);
 	const navigate = useNavigate();
 
 	if (!isPlayerJoined) {
@@ -52,7 +50,6 @@ const GameArea = () => {
 
 		socket.on('joined', (players: boolean) => {
 			setIsPlayerJoined(players);
-			console.log('peen');
 		});
 	}
 
@@ -62,14 +59,22 @@ const GameArea = () => {
 
 	const LeftRoomCheck = (playerLeft: boolean, player: string) => {
 		setIsPlayerJoined(playerLeft);
-		console.log('run when player leaves check 2');
+
 		if (player === 'host') {
 			navigate('/');
-			console.log('run when player leaves');
+		} else {
+			setGamePlay({
+				...gamePlay,
+				theWinner: '',
+				boardTurn: 'X',
+				isGameEnded: false,
+				playersTurn: 'host',
+				board: Array(9).fill(''),
+				totalMoves: 1,
+			});
 		}
 	};
 
-	// Need clean up function
 	useEffect(() => {
 		socket.on('left-room', (playerLeft: boolean, player: string) => {
 			LeftRoomCheck(playerLeft, player);
@@ -100,11 +105,22 @@ const GameArea = () => {
 						<p>0</p>
 					</div>
 				</div>
-				<Link to='/' className='button-style absolute bottom-16 left-10 button-color-one w-28 z-30' onClick={() => leaveGame(id, type)}>
+				<Link
+					to='/'
+					className='button-style absolute bottom-16 left-10 button-color-one w-28 z-30'
+					onClick={() => leaveGame(id, type)}
+				>
 					Rage Quit
 				</Link>
 			</div>
-			<PlayAgain isPlayerJoined={isPlayerJoined} gamePlay={gamePlay} setGamePlay={setGamePlay} roomId={id} />
+			<PlayAgain
+				gamePlay={gamePlay}
+				roomId={id}
+				playerIdentifier={type}
+				trackScore={trackScore}
+				setTrackScore={setTrackScore}
+				setGamePlay={setGamePlay}
+			/>
 		</div>
 	);
 };

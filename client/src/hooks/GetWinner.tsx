@@ -3,8 +3,6 @@ type WinnerProps = {
 	isWinner: string | undefined;
 };
 
-//TODO: This not working also
-// This is running multiple times when player clicks on div
 export function GetWinner({ player, isWinner }: WinnerProps) {
 	let won: string | undefined;
 

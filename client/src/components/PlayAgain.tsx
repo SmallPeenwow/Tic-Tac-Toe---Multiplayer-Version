@@ -3,29 +3,35 @@ import { GamePlay } from '../pages/GameArea';
 
 type PlayAgainProps = {
 	roomId: string | undefined;
-	isPlayerJoined: boolean;
 	gamePlay: GamePlay;
+	trackScore: number;
+	playerIdentifier: string | undefined;
+	setTrackScore: (action: number) => void;
 	setGamePlay: React.Dispatch<React.SetStateAction<GamePlay>>;
 };
 
-//TODO: Send this to player side also
-// TODO: Don't think player X is working and should look at giving own turns
-// TODO: Maybe make this a function in GameArea for when other player leaves so board
-const PlayAgain = ({ isPlayerJoined, gamePlay, setGamePlay, roomId }: PlayAgainProps) => {
+const PlayAgain = ({ gamePlay, roomId, playerIdentifier, trackScore, setGamePlay, setTrackScore }: PlayAgainProps) => {
 	const restartGame = () => {
-		//ResetState({ gamePlay, setGamePlay, isPlayerJoined, roomId });
-		setGamePlay({ ...gamePlay, theWinner: '', boardTurn: 'X', isGameEnded: false, playersTurn: 'host', board: Array().fill(''), totalMoves: 1 });
-		// const StateChanged = (game: GamePlay) => {
-		// 	setGamePlay({ ...game, theWinner: '', boardTurn: 'X', isGameEnded: false, playersTurn: 'host', board: Array().fill(''), totalMoves: 1 });
-		// };
+		setGamePlay({
+			...gamePlay,
+			theWinner: '',
+			boardTurn: 'X',
+			isGameEnded: false,
+			playersTurn: 'host',
+			board: Array(9).fill(''),
+			totalMoves: 1,
+		});
+
+		if (playerIdentifier === gamePlay.theWinner) {
+			setTrackScore(trackScore++);
+		}
+
+		socket.emit('reset-board', roomId);
 	};
 
-	if (isPlayerJoined && gamePlay.isGameEnded) {
-		socket.emit('reset-board', gamePlay, roomId); // TODO: must do on server side and make sure this side is alright
-		socket.on('board-reset', (game: GamePlay) => {
-			// StateChanged(game); will fix
-		});
-	}
+	socket.on('board-reset', () => {
+		restartGame;
+	});
 
 	return (
 		<>

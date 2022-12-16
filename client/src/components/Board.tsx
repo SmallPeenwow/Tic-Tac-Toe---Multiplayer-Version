@@ -10,24 +10,19 @@ type BoardProps = {
 	setGamePlay: React.Dispatch<React.SetStateAction<GamePlay>>;
 };
 
-const Board = ({
-	roomId,
-	playerCheckType,
-
-	gamePlay,
-	setGamePlay,
-}: BoardProps) => {
+const Board = ({ roomId, playerCheckType, gamePlay, setGamePlay }: BoardProps) => {
 	const boardArray: string[] = gamePlay.board;
 
 	const clicked = (event: React.MouseEvent<HTMLDivElement>) => {
 		event.preventDefault();
+
 		// Will stop the rest of the code from running when is true
 		if (gamePlay.isGameEnded || gamePlay.playersTurn !== playerCheckType) {
 			return;
 		}
 
 		// The number of the div data-square
-		let squareValue = parseInt((event.target as HTMLDivElement).dataset.square ?? 'null');
+		let squareValue = parseInt((event.target as HTMLDivElement).dataset.square ?? '');
 
 		if (gamePlay.board[squareValue] === '') {
 			let newArray: string[] = updateArray(squareValue, gamePlay.board, gamePlay.boardTurn);
@@ -46,7 +41,6 @@ const Board = ({
 				totalMoves: gamePlay.totalMoves++,
 				playersTurn: playerCheckType === 'host' ? 'joinGame' : 'host',
 			});
-			console.log(JSON.stringify(gamePlay) + ' game');
 			socket.emit('board-function', roomId, boardArray, gamePlay.boardTurn, gameEnd, playerCheckType, winnerName);
 		}
 	};
@@ -71,11 +65,10 @@ const Board = ({
 				totalMoves: gamePlay.totalMoves++,
 				theWinner: winner,
 			});
-			console.log(winner + ' sending');
+			console.log(winner + ' sending'); // Gets called more times when board value changed
 		});
 	};
 
-	// Renders to many times and win check is behind
 	useEffect(() => {
 		sendChanges();
 

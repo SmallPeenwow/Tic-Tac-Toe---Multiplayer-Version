@@ -40,8 +40,8 @@ io.on('connection', function (socket: any) {
 
 	//TODO: Player needs some check as when more people are starting new game screen freaks out
 
-	socket.on('reset-board', (gamePlay: any, roomId: string) => {
-		io.to(roomId).emit('board-reset', gamePlay);
+	socket.on('reset-board', (roomId: string) => {
+		io.to(roomId).emit('board-reset');
 	});
 
 	socket.on('send-winner', (playerWinner: string, roomId: string) => {
