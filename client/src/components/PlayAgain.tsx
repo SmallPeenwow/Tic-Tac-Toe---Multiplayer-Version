@@ -4,13 +4,13 @@ import { GamePlay } from '../pages/GameArea';
 type PlayAgainProps = {
 	roomId: string | undefined;
 	gamePlay: GamePlay;
-	trackScore: number;
+	// trackScore: number;
 	playerIdentifier: string | undefined;
-	setTrackScore: (action: number) => void;
+	// setTrackScore: (action: number) => void;
 	setGamePlay: React.Dispatch<React.SetStateAction<GamePlay>>;
 };
 
-const PlayAgain = ({ gamePlay, roomId, playerIdentifier, trackScore, setGamePlay, setTrackScore }: PlayAgainProps) => {
+const PlayAgain = ({ gamePlay, roomId, playerIdentifier, setGamePlay }: PlayAgainProps) => {
 	const restartGame = () => {
 		setGamePlay({
 			...gamePlay,
@@ -20,11 +20,8 @@ const PlayAgain = ({ gamePlay, roomId, playerIdentifier, trackScore, setGamePlay
 			playersTurn: 'host',
 			board: Array(9).fill(''),
 			totalMoves: 1,
+			trackScore: playerIdentifier === gamePlay.theWinner ? gamePlay.trackScore + 1 : gamePlay.trackScore,
 		});
-
-		if (playerIdentifier === gamePlay.theWinner) {
-			setTrackScore(trackScore++);
-		}
 
 		socket.emit('reset-board', roomId);
 	};

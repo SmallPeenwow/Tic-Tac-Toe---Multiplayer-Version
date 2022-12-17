@@ -20,6 +20,7 @@ export type GamePlay = {
 	playersTurn: string;
 	board: string[];
 	totalMoves: number;
+	trackScore: number;
 };
 
 enum Player {
@@ -40,9 +41,10 @@ const GameArea = () => {
 		playersTurn: Player.host,
 		board: Array(9).fill(''),
 		totalMoves: 1,
+		trackScore: 0,
 	});
 	const [isPlayerJoined, setIsPlayerJoined] = useState(false);
-	const [trackScore, setTrackScore] = useState(0);
+	const [playerTwoTrackScore, setPlayerTwoTrackScore] = useState(0);
 	const navigate = useNavigate();
 
 	if (!isPlayerJoined) {
@@ -50,6 +52,14 @@ const GameArea = () => {
 
 		socket.on('joined', (players: boolean) => {
 			setIsPlayerJoined(players);
+		});
+	}
+
+	if (gamePlay.isGameEnded) {
+		socket.emit('send-score', gamePlay.trackScore, id);
+
+		socket.on('score-sent', (score: number) => {
+			setPlayerTwoTrackScore(score);
 		});
 	}
 
@@ -75,15 +85,9 @@ const GameArea = () => {
 		}
 	};
 
-	useEffect(() => {
-		socket.on('left-room', (playerLeft: boolean, player: string) => {
-			LeftRoomCheck(playerLeft, player);
-		});
-
-		return () => {
-			LeftRoomCheck;
-		};
-	}, [isPlayerJoined]);
+	socket.on('left-room', (playerLeft: boolean, player: string) => {
+		LeftRoomCheck(playerLeft, player);
+	});
 
 	return (
 		<div className='min-h-screen flex flex-col text-white text-center justify-center items-center bg-main-background'>
@@ -95,14 +99,13 @@ const GameArea = () => {
 				<h2 className='border-b-2 border-b-white w-72 text-2xl'>Score Board</h2>
 				<div className='flex justify-center text-xl w-72'>
 					<div className='flex capitalize flex-col p-2 px-4 basis-32 overflow-hidden'>
-						{/* Need to do an emit with socket.io for player display with you and player 1 ?? Will probably need to do something on the server side for this */}
 						<p>You</p>
-						<p>0</p>
+						<p>{gamePlay.trackScore}</p>
 					</div>
 					<div className='border-l-2 border-l-white basis-0.5 '></div>
 					<div className='flex capitalize flex-col p-2 px-4 basis-32 overflow-hidden'>
 						<p>{type === 'host' ? 'Player 2' : 'Player 1'}</p>
-						<p>0</p>
+						<p>{playerTwoTrackScore}</p>
 					</div>
 				</div>
 				<Link
@@ -113,14 +116,7 @@ const GameArea = () => {
 					Rage Quit
 				</Link>
 			</div>
-			<PlayAgain
-				gamePlay={gamePlay}
-				roomId={id}
-				playerIdentifier={type}
-				trackScore={trackScore}
-				setTrackScore={setTrackScore}
-				setGamePlay={setGamePlay}
-			/>
+			<PlayAgain gamePlay={gamePlay} roomId={id} playerIdentifier={type} setGamePlay={setGamePlay} />
 		</div>
 	);
 };

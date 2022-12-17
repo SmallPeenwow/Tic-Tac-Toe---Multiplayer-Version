@@ -41,6 +41,7 @@ const Board = ({ roomId, playerCheckType, gamePlay, setGamePlay }: BoardProps) =
 				totalMoves: gamePlay.totalMoves++,
 				playersTurn: playerCheckType === 'host' ? 'joinGame' : 'host',
 			});
+
 			socket.emit('board-function', roomId, boardArray, gamePlay.boardTurn, gameEnd, playerCheckType, winnerName);
 		}
 	};
@@ -53,29 +54,18 @@ const Board = ({ roomId, playerCheckType, gamePlay, setGamePlay }: BoardProps) =
 		return arrayCopy;
 	};
 
-	// This keeps increasing when ran
-	const sendChanges = () => {
-		socket.on('board-turn', (array: string[], turn: string, gameEnded: boolean, playerTurn: string, winner: string) => {
-			setGamePlay({
-				...gamePlay,
-				board: array,
-				boardTurn: turn == 'X' ? 'O' : 'X',
-				isGameEnded: gameEnded,
-				playersTurn: playerTurn,
-				totalMoves: gamePlay.totalMoves++,
-				theWinner: winner,
-			});
-			console.log(winner + ' sending'); // Gets called more times when board value changed
+	socket.on('board-turn', (array: string[], turn: string, gameEnded: boolean, playerTurn: string, winner: string) => {
+		setGamePlay({
+			...gamePlay,
+			board: array,
+			boardTurn: turn == 'X' ? 'O' : 'X',
+			isGameEnded: gameEnded,
+			playersTurn: playerTurn,
+			totalMoves: gamePlay.totalMoves++,
+			theWinner: winner,
 		});
-	};
-
-	useEffect(() => {
-		sendChanges();
-
-		return () => {
-			sendChanges();
-		};
-	}, [gamePlay.board]);
+		console.log(winner + ' sending'); // Gets called more times when board value changed
+	});
 
 	return (
 		<div className='flex w-72 flex-wrap mt-6 mb-6 cursor-pointer' onClick={clicked}>
